@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat styles/globals.css)",
+      "Bash(cat app/globals.css)",
+      "Bash(cat lib/utils.ts)",
+      "Bash(cat app/layout.tsx)"
+    ]
+  }
+}
