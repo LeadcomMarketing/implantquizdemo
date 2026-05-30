@@ -97,7 +97,7 @@ function HappidentQuizPageInner() {
               </span>
               <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink bg-surface border border-border py-2 px-3.5 rounded-full" style={{ boxShadow: 'var(--shadow)' }}>
                 <Check className="w-[15px] h-[15px] text-coral" />
-                Livstidsgaranti på skruven
+                Livstidsgaranti på implantatet
               </span>
               <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink bg-surface border border-border py-2 px-3.5 rounded-full" style={{ boxShadow: 'var(--shadow)' }}>
                 <Check className="w-[15px] h-[15px] text-coral" />

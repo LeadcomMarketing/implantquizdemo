@@ -3,7 +3,6 @@
 import { useEffect, useRef, useCallback } from "react"
 import { ChevronLeft, ChevronRight, Lightbulb, Check } from "lucide-react"
 import type { QuizQuestion } from "@/lib/types"
-import { ToothIllustration } from "./illustrations"
 import { cn } from "@/lib/utils"
 
 interface QuizCardProps {
@@ -224,16 +223,16 @@ function QuizOption({
           {index + 1}
         </span>
 
-        {/* Illustration */}
-        <span
-          className={cn(
-            "border-b border-border py-5 px-3 flex items-center justify-center",
-            isSelected
-              ? "bg-gradient-to-b from-[#FFF1EC] to-[#FFE2D9]"
-              : "bg-gradient-to-b from-[#FFFDF8] to-[#FFF4EF] hover:from-[#FFF8F2] hover:to-[#FFEDE6]"
-          )}
-        >
-          <ToothIllustration type={option.illustration} />
+        {/* Photo */}
+        <span className="border-b border-border block overflow-hidden aspect-square">
+          <img
+            src={`/quiz-${option.illustration}.jpg`}
+            alt={option.label}
+            className={cn(
+              "w-full h-full object-cover transition-transform duration-300",
+              isSelected ? "scale-[1.03]" : "hover:scale-[1.03]"
+            )}
+          />
         </span>
 
         {/* Label */}
