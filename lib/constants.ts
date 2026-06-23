@@ -5,6 +5,7 @@ import type {
   Testimonial,
   ProcessStep,
   Reason,
+  ClinicInfo,
 } from "./types"
 
 // Quiz Questions - Swedish dental implant funnel
@@ -291,6 +292,16 @@ export const REASONS: Reason[] = [
     iconType: "checkmark",
   },
 ]
+
+// Clinic info — headline, location sub-headline and Google Maps embed.
+// TODO: Swap mapEmbedSrc for the clinic's real Google Maps "Share > Embed a map" src URL.
+export const CLINIC_INFO: ClinicInfo = {
+  eyebrow: "Besök oss",
+  headline: "Din klinik mitt i Stockholm",
+  subheadline: "Happident Stockholm — Kungsgatan 12, 111 35 Stockholm",
+  mapEmbedSrc:
+    "https://www.google.com/maps?q=Kungsgatan+12,+111+35+Stockholm&output=embed",
+}
 
 // Condition descriptions for analysis
 export const CONDITION_DESCRIPTIONS: Record<string, string> = {

@@ -79,3 +79,11 @@ export interface Reason {
   description: string
   iconType: "shield" | "check" | "star" | "checkmark"
 }
+
+// Clinic Data
+export interface ClinicInfo {
+  eyebrow: string
+  headline: string
+  subheadline: string
+  mapEmbedSrc: string
+}

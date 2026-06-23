@@ -11,6 +11,7 @@ import { LandingPage } from '@/components/landing-page'
 import { SiteHeader } from '@/components/site-header'
 import { OptInModal } from '@/components/opt-in-modal'
 import { CAMPAIGNS, DEFAULT_CAMPAIGN } from '@/lib/campaigns'
+import { cn } from '@/lib/utils'
 
 // ─── Inner page (needs useSearchParams, must be inside <Suspense>) ─────────────
 
@@ -62,20 +63,37 @@ function HappidentQuizPageInner() {
           <div className="max-w-[760px] mx-auto w-full">
 
             {/* ── Hero copy — swap here to A/B test ad hooks ── */}
-            <div className="text-center flex flex-col items-center gap-2.5 mb-5 reveal in">
-              <span className="inline-flex items-center gap-2 text-[12.5px] font-bold tracking-[0.12em] uppercase text-coral-deep bg-coral-soft py-2 px-3.5 rounded-full">
-                <Sparkles className="w-3.5 h-3.5" />
-                {hero.eyebrow}
-              </span>
-              <p className="font-display font-medium text-[clamp(20px,3.4vw,26px)] text-ink max-w-[24ch] leading-[1.18] text-balance">
-                {hero.headline}
-              </p>
-              {hero.sub && (
-                <p className="text-muted text-[15px] max-w-[38ch] text-balance">
-                  {hero.sub}
-                </p>
-              )}
-            </div>
+            {(() => {
+              const isFirst = quiz.currentIndex === 0
+              return (
+                <div className={cn(
+                  'text-center flex flex-col items-center reveal in',
+                  isFirst ? 'gap-4 mb-8' : 'gap-2.5 mb-5'
+                )}>
+                  <span className={cn(
+                    'inline-flex items-center gap-2 font-bold tracking-[0.12em] uppercase text-coral-deep bg-coral-soft rounded-full transition-all duration-300',
+                    isFirst ? 'text-[13.5px] py-2.5 px-4' : 'text-[12.5px] py-2 px-3.5'
+                  )}>
+                    <Sparkles className={isFirst ? 'w-4 h-4' : 'w-3.5 h-3.5'} />
+                    {hero.eyebrow}
+                  </span>
+                  <p className={cn(
+                    'font-display font-semibold text-ink leading-[1.08] text-balance transition-all duration-300',
+                    isFirst ? 'text-[clamp(32px,5.5vw,58px)] max-w-[18ch]' : 'text-[clamp(20px,3.4vw,26px)] max-w-[24ch] leading-[1.18] font-medium'
+                  )}>
+                    {hero.headline}
+                  </p>
+                  {hero.sub && (
+                    <p className={cn(
+                      'text-muted text-balance transition-all duration-300',
+                      isFirst ? 'text-[17px] max-w-[36ch]' : 'text-[15px] max-w-[38ch]'
+                    )}>
+                      {hero.sub}
+                    </p>
+                  )}
+                </div>
+              )
+            })()}
 
             {quiz.currentQuestion && (
               <QuizCard

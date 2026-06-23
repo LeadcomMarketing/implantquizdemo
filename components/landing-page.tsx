@@ -9,6 +9,7 @@ import {
   TESTIMONIALS,
   FAQ_ITEMS,
   FOOTER_LINKS,
+  CLINIC_INFO,
 } from "@/lib/constants"
 import { ProcessStepIllustration } from "./illustrations"
 import { FAQAccordion } from "./faq-accordion"
@@ -34,6 +35,9 @@ export function LandingPage({ onOpenModal }: LandingPageProps) {
 
       {/* Testimonials Section */}
       <TestimonialsSection />
+
+      {/* Clinic Section */}
+      <ClinicSection />
 
       {/* FAQ Section */}
       <FAQSection />
@@ -313,6 +317,37 @@ function TestimonialsSection() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Clinic Section
+function ClinicSection() {
+  return (
+    <section className="py-16 md:py-20">
+      <div className="max-w-[1080px] mx-auto px-4 md:px-6">
+        <div className="text-center max-w-[640px] mx-auto mb-10 reveal">
+          <div className="text-xs font-bold tracking-[0.14em] uppercase text-coral-deep mb-3">
+            {CLINIC_INFO.eyebrow}
+          </div>
+          <h2 className="font-display font-semibold text-[clamp(26px,4.4vw,38px)] text-ink">
+            {CLINIC_INFO.headline}
+          </h2>
+          <p className="text-muted text-base mt-3">{CLINIC_INFO.subheadline}</p>
+        </div>
+
+        <div className="reveal rounded-[var(--r)] overflow-hidden border border-border" style={{ boxShadow: "var(--shadow)" }}>
+          <iframe
+            src={CLINIC_INFO.mapEmbedSrc}
+            title="Karta till kliniken"
+            width="100%"
+            height="420"
+            style={{ border: 0, display: "block" }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
     </section>
