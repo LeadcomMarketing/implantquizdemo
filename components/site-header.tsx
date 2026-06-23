@@ -1,16 +1,16 @@
 "use client"
 
 import { Phone } from "lucide-react"
-import Image from "next/image"
-import type { QuizPhase } from "@/lib/types"
+import type { ClinicConfig, QuizPhase } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 interface SiteHeaderProps {
+  clinic: ClinicConfig
   phase: QuizPhase
   onOpenModal: () => void
 }
 
-export function SiteHeader({ phase, onOpenModal }: SiteHeaderProps) {
+export function SiteHeader({ clinic, phase, onOpenModal }: SiteHeaderProps) {
   const showFullHeader = phase === "analysis"
 
   return (
@@ -23,14 +23,11 @@ export function SiteHeader({ phase, onOpenModal }: SiteHeaderProps) {
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between py-3 gap-3.5">
           {/* Logo */}
-          <a href="#" className="flex items-center" aria-label="Happident">
-            <Image
-              src="/happident-logo.svg"
-              alt="Happident"
-              width={120}
-              height={30}
+          <a href="#" className="flex items-center" aria-label={clinic.name}>
+            <img
+              src={clinic.logoUrl}
+              alt={clinic.name}
               className="h-[26px] md:h-[30px] w-auto"
-              priority
             />
           </a>
 
@@ -43,11 +40,11 @@ export function SiteHeader({ phase, onOpenModal }: SiteHeaderProps) {
           >
             {/* Phone link */}
             <a
-              href="tel:+46103303100"
+              href={`tel:${clinic.phoneTel}`}
               className="flex items-center gap-1.5 text-ink no-underline font-semibold text-[14.5px] whitespace-nowrap"
             >
               <Phone className="w-[17px] h-[17px] text-coral" />
-              <span className="hidden sm:inline">010-330 31 00</span>
+              <span className="hidden sm:inline">{clinic.phone}</span>
             </a>
 
             {/* CTA Button */}

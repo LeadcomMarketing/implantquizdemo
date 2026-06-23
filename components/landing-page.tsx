@@ -1,7 +1,6 @@
 "use client"
 
 import { Phone, Check, Shield, Star, CheckCircle } from "lucide-react"
-import Image from "next/image"
 import {
   PROCESS_STEPS,
   PRICING_CARDS,
@@ -9,16 +8,17 @@ import {
   TESTIMONIALS,
   FAQ_ITEMS,
   FOOTER_LINKS,
-  CLINIC_INFO,
 } from "@/lib/constants"
+import type { ClinicConfig } from "@/lib/types"
 import { ProcessStepIllustration } from "./illustrations"
 import { FAQAccordion } from "./faq-accordion"
 
 interface LandingPageProps {
+  clinic: ClinicConfig
   onOpenModal: (source: string) => void
 }
 
-export function LandingPage({ onOpenModal }: LandingPageProps) {
+export function LandingPage({ clinic, onOpenModal }: LandingPageProps) {
   return (
     <div className="animate-landing-in">
       {/* Steps Section */}
@@ -31,22 +31,22 @@ export function LandingPage({ onOpenModal }: LandingPageProps) {
       <FinancingSection onOpenModal={onOpenModal} />
 
       {/* Reasons Section */}
-      <ReasonsSection />
+      <ReasonsSection clinic={clinic} />
 
       {/* Testimonials Section */}
-      <TestimonialsSection />
+      <TestimonialsSection clinic={clinic} />
 
       {/* Clinic Section */}
-      <ClinicSection />
+      <ClinicSection clinic={clinic} />
 
       {/* FAQ Section */}
       <FAQSection />
 
       {/* Final CTA */}
-      <FinalCTASection onOpenModal={onOpenModal} />
+      <FinalCTASection clinic={clinic} onOpenModal={onOpenModal} />
 
       {/* Footer */}
-      <Footer />
+      <Footer clinic={clinic} />
     </div>
   )
 }
@@ -239,7 +239,7 @@ function FinancingSection({
 }
 
 // Reasons Section
-function ReasonsSection() {
+function ReasonsSection({ clinic }: { clinic: ClinicConfig }) {
   const iconMap = {
     shield: Shield,
     check: CheckCircle,
@@ -252,7 +252,7 @@ function ReasonsSection() {
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
         <div className="text-center max-w-[640px] mx-auto mb-10 reveal">
           <div className="text-xs font-bold tracking-[0.14em] uppercase text-coral-deep mb-3">
-            Varför Happident
+            Varför {clinic.name}
           </div>
           <h2 className="font-display font-semibold text-[clamp(26px,4.4vw,38px)] text-ink">
             Fyra anledningar att välja oss
@@ -284,7 +284,9 @@ function ReasonsSection() {
 }
 
 // Testimonials Section
-function TestimonialsSection() {
+function TestimonialsSection({ clinic }: { clinic: ClinicConfig }) {
+  const reviews = clinic.reviews ?? TESTIMONIALS
+
   return (
     <section className="py-16 md:py-20 bg-surface">
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
@@ -298,7 +300,7 @@ function TestimonialsSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 reveal">
-          {TESTIMONIALS.map((testimonial, index) => (
+          {reviews.map((testimonial, index) => (
             <div
               key={index}
               className="bg-surface border border-border rounded-[var(--r-sm)] p-5"
@@ -324,23 +326,23 @@ function TestimonialsSection() {
 }
 
 // Clinic Section
-function ClinicSection() {
+function ClinicSection({ clinic }: { clinic: ClinicConfig }) {
   return (
     <section className="py-16 md:py-20">
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
         <div className="text-center max-w-[640px] mx-auto mb-10 reveal">
           <div className="text-xs font-bold tracking-[0.14em] uppercase text-coral-deep mb-3">
-            {CLINIC_INFO.eyebrow}
+            Besök oss
           </div>
           <h2 className="font-display font-semibold text-[clamp(26px,4.4vw,38px)] text-ink">
-            {CLINIC_INFO.headline}
+            Besök oss på {clinic.name}
           </h2>
-          <p className="text-muted text-base mt-3">{CLINIC_INFO.subheadline}</p>
+          <p className="text-muted text-base mt-3">{clinic.address}</p>
         </div>
 
         <div className="reveal rounded-[var(--r)] overflow-hidden border border-border" style={{ boxShadow: "var(--shadow)" }}>
           <iframe
-            src={CLINIC_INFO.mapEmbedSrc}
+            src={clinic.mapEmbedSrc}
             title="Karta till kliniken"
             width="100%"
             height="420"
@@ -378,8 +380,10 @@ function FAQSection() {
 
 // Final CTA Section
 function FinalCTASection({
+  clinic,
   onOpenModal,
 }: {
+  clinic: ClinicConfig
   onOpenModal: (source: string) => void
 }) {
   return (
@@ -399,10 +403,10 @@ function FinalCTASection({
             <span className="text-muted text-[14.5px]">
               Eller ring:{" "}
               <a
-                href="tel:+46103303100"
+                href={`tel:${clinic.phoneTel}`}
                 className="text-coral-deep font-semibold no-underline"
               >
-                010-330 31 00
+                {clinic.phone}
               </a>
             </span>
           </div>
@@ -413,18 +417,24 @@ function FinalCTASection({
 }
 
 // Footer
-function Footer() {
+function Footer({ clinic }: { clinic: ClinicConfig }) {
+  const companyLinks = [
+    "Kontakta oss",
+    "Karriär",
+    "Tandvårdsbidrag",
+    clinic.phone,
+    clinic.email,
+  ]
+
   return (
     <footer className="bg-ink text-[#C9BFB3] mt-16 py-12 pb-8">
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <Image
-              src="/happident-logo.svg"
-              alt="Happident"
-              width={120}
-              height={28}
+            <img
+              src={clinic.logoUrl}
+              alt={clinic.name}
               className="h-7 w-auto brightness-0 invert"
             />
             <p className="text-[13.5px] mt-3.5 max-w-[30ch]">
@@ -477,14 +487,14 @@ function Footer() {
               Företaget
             </h4>
             <ul className="list-none space-y-1">
-              {FOOTER_LINKS.company.map((item) => (
+              {companyLinks.map((item) => (
                 <li key={item}>
                   <a
                     href={
                       item.includes("@")
                         ? `mailto:${item}`
                         : item.match(/^\d/)
-                          ? `tel:+46${item.replace(/\D/g, "").slice(1)}`
+                          ? `tel:${clinic.phoneTel}`
                           : "#"
                     }
                     className="text-[#B7ACA0] text-[13.5px] leading-8 no-underline hover:text-white transition-colors"
@@ -498,7 +508,7 @@ function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-8 pt-5 text-center text-[12.5px] text-[#8E8479]">
-          © 2026 Happident. Alla rättigheter förbehållna.
+          © 2026 {clinic.name}. Alla rättigheter förbehållna.
         </div>
       </div>
     </footer>

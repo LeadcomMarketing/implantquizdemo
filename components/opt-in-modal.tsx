@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { X, Check } from "lucide-react"
-import type { QuizAnswers, LeadData } from "@/lib/types"
+import type { QuizAnswers, LeadData, ClinicConfig } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 interface OptInModalProps {
@@ -10,6 +10,7 @@ interface OptInModalProps {
   onClose: () => void
   source: string
   quizAnswers: QuizAnswers
+  clinic: ClinicConfig
 }
 
 export function OptInModal({
@@ -17,6 +18,7 @@ export function OptInModal({
   onClose,
   source,
   quizAnswers,
+  clinic,
 }: OptInModalProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -110,6 +112,7 @@ export function OptInModal({
       gdprConsent: formData.consent,
       source,
       quizAnswers,
+      clinic: clinic.slug,
     }
 
     try {
@@ -294,7 +297,7 @@ export function OptInModal({
                   errors.consent ? "text-coral-deep" : "text-muted"
                 )}
               >
-                Jag godkänner att Happident kontaktar mig om min konsultation och
+                Jag godkänner att {clinic.name} kontaktar mig om min konsultation och
                 har läst{" "}
                 <a
                   href="#"
@@ -337,17 +340,17 @@ export function OptInModal({
               Tack{firstName ? ` ${firstName}` : ""}! Din förfrågan är skickad.
             </h3>
             <p className="text-muted text-[15px] mt-2.5">
-              En tandläkare på Happident ringer dig inom 24 timmar för att boka
-              in din kostnadsfria konsultation.
+              En tandläkare på {clinic.name} ringer dig inom 24 timmar för att
+              boka in din kostnadsfria konsultation.
             </p>
             <div className="mt-4 text-sm">
               Vill du inte vänta? Ring oss direkt:
               <br />
               <a
-                href="tel:+46103303100"
+                href={`tel:${clinic.phoneTel}`}
                 className="text-coral-deep font-bold font-display text-lg no-underline"
               >
-                010-330 31 00
+                {clinic.phone}
               </a>
             </div>
           </div>

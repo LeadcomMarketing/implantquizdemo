@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getClinicConfig } from '@/lib/clinics'
 
 interface LeadPayload {
   name: string
@@ -7,6 +8,7 @@ interface LeadPayload {
   gdprConsent: boolean
   source: string
   quizAnswers: Record<string, string>
+  clinic: string
 }
 
 function validateLead(body: unknown): { valid: true; data: LeadPayload } | { valid: false; error: string } {
@@ -33,6 +35,7 @@ function validateLead(body: unknown): { valid: true; data: LeadPayload } | { val
       quizAnswers: (b.quizAnswers && typeof b.quizAnswers === 'object')
         ? (b.quizAnswers as Record<string, string>)
         : {},
+      clinic: typeof b.clinic === 'string' ? b.clinic : 'default',
     },
   }
 }
@@ -51,12 +54,15 @@ export async function POST(req: NextRequest) {
   }
 
   const { data } = result
-  console.log('[LEAD]', new Date().toISOString(), JSON.stringify(data, null, 2))
+  const clinicConfig = getClinicConfig(data.clinic)
+  console.log('[LEAD]', new Date().toISOString(), clinicConfig.slug, JSON.stringify(data, null, 2))
 
-  // TODO: Forward to CRM webhook
-  // const LEAD_WEBHOOK_URL = process.env.LEAD_WEBHOOK_URL
-  // if (LEAD_WEBHOOK_URL) {
-  //   await fetch(LEAD_WEBHOOK_URL, {
+  // Forward to this clinic's webhook if it has one, else fall back to the global LEAD_WEBHOOK_URL.
+  const webhookUrl = clinicConfig.webhookUrl || process.env.LEAD_WEBHOOK_URL
+  console.log('[LEAD] webhook target:', webhookUrl ?? '(none configured)')
+  // TODO: re-enable once a real webhook is configured
+  // if (webhookUrl) {
+  //   await fetch(webhookUrl, {
   //     method: 'POST',
   //     headers: { 'Content-Type': 'application/json' },
   //     body: JSON.stringify(data),
@@ -79,7 +85,7 @@ export async function POST(req: NextRequest) {
   //         event_time: Math.floor(Date.now() / 1000),
   //         action_source: 'website',
   //         user_data: { em: [hashedEmail], ph: [hashedPhone] },
-  //         custom_data: { source: data.source },
+  //         custom_data: { source: data.source, clinic: data.clinic },
   //       }],
   //     }),
   //   })

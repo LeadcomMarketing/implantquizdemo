@@ -1,0 +1,14 @@
+Add multi-clinic system via /c/[clinic] dynamic route
+
+- New lib/clinics.ts registry: per-clinic logo, contact info, address,
+  map embed, brand color overrides, reviews and webhook URL
+- /c/[clinic] route resolves a clinic by slug, injects a :root CSS var
+  override block for that clinic's colors (default brand is the fallback)
+- Shared QuizPage component now takes a clinic prop; "/" uses the default
+- SiteHeader, LandingPage (reviews/clinic/footer/CTA) and OptInModal are
+  all clinic-aware; logos render via plain <img>
+- Lead payload carries clinic slug; /api/lead forwards to that clinic's
+  webhook, falling back to LEAD_WEBHOOK_URL env
+- Unknown slug falls back to the default Happident branding
+
+Co-Authored-By: Claude Opus 4.8 (noreply@anthropic.com)
