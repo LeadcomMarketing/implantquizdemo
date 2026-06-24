@@ -28,7 +28,7 @@ export function LandingPage({ clinic, onOpenModal }: LandingPageProps) {
       <PricingSection onOpenModal={onOpenModal} />
 
       {/* Financing Band */}
-      <FinancingSection onOpenModal={onOpenModal} />
+      <FinancingSection clinic={clinic} onOpenModal={onOpenModal} />
 
       {/* Reasons Section */}
       <ReasonsSection clinic={clinic} />
@@ -188,10 +188,14 @@ function PricingSection({
 
 // Financing Section
 function FinancingSection({
+  clinic,
   onOpenModal,
 }: {
+  clinic: ClinicConfig
   onOpenModal: (source: string) => void
 }) {
+  const monthlyFromPrice = clinic.monthlyFromPrice || '300 kr'
+  const ordinaryPrice = clinic.ordinaryPrice || '1 590 kr'
   return (
     <section className="py-16 md:py-20 bg-surface">
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
@@ -218,7 +222,7 @@ function FinancingSection({
           </div>
           <div className="bg-white/[0.06] border border-white/[0.12] rounded-[var(--r-sm)] p-6 text-center">
             <div className="font-display font-semibold text-[clamp(40px,7vw,64px)] text-gold leading-none">
-              300 kr
+              {monthlyFromPrice}
             </div>
             <div className="text-[#C9BFB3] text-sm mt-1.5">
               /mån för en enskild tand
@@ -229,7 +233,7 @@ function FinancingSection({
             </div>
             <div className="text-[#C9BFB3] text-sm mt-1.5">
               för din konsultation idag{" "}
-              <s className="text-[#8E8479]">(ord. 1 590 kr)</s>
+              <s className="text-[#8E8479]">(ord. {ordinaryPrice})</s>
             </div>
           </div>
         </div>
@@ -338,6 +342,9 @@ function ClinicSection({ clinic }: { clinic: ClinicConfig }) {
             Besök oss på {clinic.name}
           </h2>
           <p className="text-muted text-base mt-3">{clinic.address}</p>
+          {clinic.openingHours && (
+            <p className="text-muted text-sm mt-1.5">{clinic.openingHours}</p>
+          )}
         </div>
 
         <div className="reveal rounded-[var(--r)] overflow-hidden border border-border" style={{ boxShadow: "var(--shadow)" }}>
@@ -441,6 +448,11 @@ function Footer({ clinic }: { clinic: ClinicConfig }) {
               Modern tandvård med fokus på trygghet, kvalitet och
               tillgänglighet.
             </p>
+            {clinic.orgNumber && (
+              <p className="text-[12px] text-[#8E8479] mt-3">
+                Org.nr: {clinic.orgNumber}
+              </p>
+            )}
           </div>
 
           {/* Treatments */}

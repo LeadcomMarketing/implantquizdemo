@@ -2,20 +2,24 @@
 
 import { useMemo } from "react"
 import { ChevronLeft, Check, Sparkles } from "lucide-react"
-import type { QuizAnswers } from "@/lib/types"
+import type { ClinicConfig, QuizAnswers } from "@/lib/types"
 import { CONDITION_DESCRIPTIONS, URGENCY_MESSAGES } from "@/lib/constants"
 
 interface AnalysisScreenProps {
   answers: QuizAnswers
+  clinic: ClinicConfig
   onOpenModal: () => void
   onBack: () => void
 }
 
 export function AnalysisScreen({
   answers,
+  clinic,
   onOpenModal,
   onBack,
 }: AnalysisScreenProps) {
+  const ordinaryPrice = clinic.ordinaryPrice || "1 590 kr"
+  const monthlyFromPrice = clinic.monthlyFromPrice || "300 kr"
   // Generate personalized analysis bullets based on answers
   const bullets = useMemo(() => {
     const result: string[] = []
@@ -66,7 +70,7 @@ export function AnalysisScreen({
     // Payment
     if (answers.payment === "yes" && answers.income === "yes") {
       result.push(
-        `Du är öppen för delbetalning och har en inkomst – goda förutsättningar för en <b>räntefri betalplan från 300 kr/mån</b>.`
+        `Du är öppen för delbetalning och har en inkomst – goda förutsättningar för en <b>räntefri betalplan från ${monthlyFromPrice}/mån</b>.`
       )
     }
     if (answers.payment === "yes" && answers.income === "no") {
@@ -76,7 +80,7 @@ export function AnalysisScreen({
     }
 
     return result
-  }, [answers])
+  }, [answers, monthlyFromPrice])
 
   // Get urgency-based next step message
   const urgencyMessage = URGENCY_MESSAGES[answers.urgency] || ""
@@ -144,7 +148,7 @@ export function AnalysisScreen({
         <div className="mt-5 text-center bg-ink text-white rounded-[var(--r-sm)] py-6 px-5">
           <div className="font-display font-semibold text-[15px] text-[#E7DFD4]">
             <s className="text-muted-2" style={{ textDecorationThickness: "2px" }}>
-              Ordinarie pris 1 590 kr
+              Ordinarie pris {ordinaryPrice}
             </s>{" "}
             &nbsp;&rarr;&nbsp;{" "}
             <b className="text-white text-xl">0 kr idag</b>

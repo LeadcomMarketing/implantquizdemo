@@ -26,6 +26,10 @@ function emptyClinic(): ClinicConfig {
     theme: {},
     reviews: [],
     webhookUrl: '',
+    ordinaryPrice: '',
+    monthlyFromPrice: '',
+    openingHours: '',
+    orgNumber: '',
   }
 }
 
@@ -271,6 +275,43 @@ export function ClinicAdmin({
               <Field label="Adress (visas i klinikavsnittet)">
                 <input className={inputCls} value={editing.address} onChange={(e) => set('address', e.target.value)} />
               </Field>
+
+              <Field label="Öppettider (visas i klinikavsnittet)">
+                <input
+                  className={inputCls}
+                  value={editing.openingHours ?? ''}
+                  placeholder="t.ex. Mån–Fre 08:00–17:00"
+                  onChange={(e) => set('openingHours', e.target.value)}
+                />
+              </Field>
+
+              <Field label="Organisationsnummer (visas i sidfoten)">
+                <input
+                  className={inputCls}
+                  value={editing.orgNumber ?? ''}
+                  placeholder="XXXXXX-XXXX"
+                  onChange={(e) => set('orgNumber', e.target.value)}
+                />
+              </Field>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Ordinarie pris (genomstruket)">
+                  <input
+                    className={inputCls}
+                    value={editing.ordinaryPrice ?? ''}
+                    placeholder="t.ex. 1 590 kr"
+                    onChange={(e) => set('ordinaryPrice', e.target.value)}
+                  />
+                </Field>
+                <Field label="Lägsta pris/mån (finansiering)">
+                  <input
+                    className={inputCls}
+                    value={editing.monthlyFromPrice ?? ''}
+                    placeholder="t.ex. 300 kr"
+                    onChange={(e) => set('monthlyFromPrice', e.target.value)}
+                  />
+                </Field>
+              </div>
 
               <Field label="Google Maps embed-URL">
                 <textarea

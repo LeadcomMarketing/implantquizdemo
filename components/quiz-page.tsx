@@ -133,6 +133,7 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
             <div className="max-w-[1080px] mx-auto px-4 md:px-6">
               <AnalysisScreen
                 answers={quiz.answers}
+                clinic={clinic}
                 onOpenModal={() => handleOpenModal('analysis')}
                 onBack={() => {
                   quiz.returnToQuiz()

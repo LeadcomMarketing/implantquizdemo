@@ -118,4 +118,12 @@ export interface ClinicConfig {
   reviews?: ClinicReview[]
   /** Where this clinic's leads get forwarded server-side. Falls back to LEAD_WEBHOOK_URL env. */
   webhookUrl?: string
+  /** Struck-through "ordinarie pris" shown before the free-consultation offer, e.g. "1 590 kr". Falls back to "1 590 kr". */
+  ordinaryPrice?: string
+  /** Lowest monthly financing price advertised, e.g. "300 kr". Falls back to "300 kr". */
+  monthlyFromPrice?: string
+  /** Opening hours shown in the clinic/visit section, e.g. "Mån–Fre 08–17". */
+  openingHours?: string
+  /** Swedish organisationsnummer, shown in the footer if set. */
+  orgNumber?: string
 }

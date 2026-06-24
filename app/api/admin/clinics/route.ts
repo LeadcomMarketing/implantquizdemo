@@ -78,6 +78,10 @@ function parseClinic(body: unknown): { ok: true; data: ClinicConfig } | { ok: fa
       theme: parseTheme(b.theme),
       reviews: parseReviews(b.reviews),
       webhookUrl: webhookUrl || undefined,
+      ordinaryPrice: str(b.ordinaryPrice) || undefined,
+      monthlyFromPrice: str(b.monthlyFromPrice) || undefined,
+      openingHours: str(b.openingHours) || undefined,
+      orgNumber: str(b.orgNumber) || undefined,
     },
   }
 }

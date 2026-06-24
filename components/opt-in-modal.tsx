@@ -175,7 +175,7 @@ export function OptInModal({
               : "Boka din gratis konsultation"}
           </h3>
           <div className="mt-2.5 text-[15px] text-muted">
-            <s className="text-muted-2">Ordinarie pris 1 590 kr</s> &rarr;{" "}
+            <s className="text-muted-2">Ordinarie pris {clinic.ordinaryPrice || "1 590 kr"}</s> &rarr;{" "}
             <b className="text-coral-deep font-display">0 kr idag</b>
           </div>
         </div>

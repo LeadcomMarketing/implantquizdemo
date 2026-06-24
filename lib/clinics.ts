@@ -13,8 +13,12 @@ export const DEFAULT_CLINIC: ClinicConfig = {
   address: 'Happident Stockholm — Kungsgatan 12, 111 35 Stockholm',
   mapEmbedSrc:
     'https://www.google.com/maps?q=Kungsgatan+12,+111+35+Stockholm&output=embed',
-  // theme / reviews / webhookUrl intentionally omitted — uses the built-in
-  // CSS defaults, the shared TESTIMONIALS list, and LEAD_WEBHOOK_URL from env.
+  ordinaryPrice: '1 590 kr',
+  monthlyFromPrice: '300 kr',
+  openingHours: 'Mån–Fre 08:00–17:00',
+  // theme / reviews / webhookUrl / orgNumber intentionally omitted — uses the
+  // built-in CSS defaults, the shared TESTIMONIALS list, and LEAD_WEBHOOK_URL
+  // from env.
 }
 
 // ─── Seed clinics ───────────────────────────────────────────────────────────────
@@ -43,6 +47,9 @@ export const SEED_CLINICS: ClinicConfig[] = [
     },
     // reviews: undefined -> falls back to the shared TESTIMONIALS list
     webhookUrl: undefined, // TODO: this clinic's CRM webhook URL
+    ordinaryPrice: '1 590 kr',
+    monthlyFromPrice: '300 kr',
+    openingHours: 'Mån–Fre 08:00–17:00',
   },
 ]
 
