@@ -16,4 +16,4 @@ node_modules
 *.tsbuildinfo
 
 # Temp commit-message files
-.git-commit-msg.txt
+.git-commit-msg.txtpackage-lock.json
