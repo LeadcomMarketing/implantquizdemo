@@ -1,5 +1,5 @@
 import 'server-only'
-import { list, put } from '@vercel/blob'
+import { get, put } from '@vercel/blob'
 import type { ClinicConfig } from '@/lib/types'
 import { DEFAULT_CLINIC, SEED_CLINICS } from '@/lib/clinics'
 
@@ -17,14 +17,10 @@ function hasBlob(): boolean {
 
 async function readBlob(): Promise<ClinicConfig[] | null> {
   if (!hasBlob()) return null
-  const { blobs } = await list({ prefix: BLOB_KEY, limit: 1 })
-  const found = blobs.find((b) => b.pathname === BLOB_KEY)
-  if (!found) return null
-  // Read-write blobs are public-by-URL; the store hostname is unguessable and we
-  // only ever fetch this server-side, so the URL is never exposed to clients.
-  const res = await fetch(found.url, { cache: 'no-store' })
-  if (!res.ok) return null
-  return (await res.json()) as ClinicConfig[]
+  const result = await get(BLOB_KEY, { access: 'private', useCache: false })
+  if (!result) return null
+  const text = await new Response(result.stream).text()
+  return JSON.parse(text) as ClinicConfig[]
 }
 
 async function writeBlob(data: ClinicConfig[]): Promise<void> {
@@ -35,7 +31,7 @@ async function writeBlob(data: ClinicConfig[]): Promise<void> {
     )
   }
   await put(BLOB_KEY, JSON.stringify(data, null, 2), {
-    access: 'public',
+    access: 'private',
     addRandomSuffix: false,
     allowOverwrite: true,
     contentType: 'application/json',
