@@ -17,15 +17,16 @@ export const DEFAULT_CLINIC: ClinicConfig = {
   // CSS defaults, the shared TESTIMONIALS list, and LEAD_WEBHOOK_URL from env.
 }
 
-// ─── Per-clinic registry ───────────────────────────────────────────────────────
-// Add a new clinic by adding an entry here. No deploy-blocking infra needed —
-// just commit and push; Vercel redeploys automatically.
+// ─── Seed clinics ───────────────────────────────────────────────────────────────
+// Used as the fallback set when the Vercel Blob store is empty or unconfigured
+// (e.g. local dev without a BLOB_READ_WRITE_TOKEN). Once a clinic is saved via the
+// admin panel, the Blob store becomes the source of truth — see lib/clinic-store.ts.
 //
-// TODO: replace this placeholder entry with real clinic data (logo, address,
-// map embed src, brand colors, reviews, webhook) before going live with it.
+// TODO: replace this placeholder entry with real clinic data, or delete it and
+// manage all clinics from /admin.
 
-export const CLINICS: Record<string, ClinicConfig> = {
-  goteborg: {
+export const SEED_CLINICS: ClinicConfig[] = [
+  {
     slug: 'goteborg',
     name: 'Happident Göteborg',
     logoUrl: '/happident-logo.svg', // TODO: swap for this clinic's real logo (place file in /public)
@@ -43,14 +44,9 @@ export const CLINICS: Record<string, ClinicConfig> = {
     // reviews: undefined -> falls back to the shared TESTIMONIALS list
     webhookUrl: undefined, // TODO: this clinic's CRM webhook URL
   },
-}
+]
 
-// ─── Lookup helpers ─────────────────────────────────────────────────────────────
-
-export function getClinicConfig(slug?: string): ClinicConfig {
-  if (!slug) return DEFAULT_CLINIC
-  return CLINICS[slug] ?? DEFAULT_CLINIC
-}
+// ─── Theme helpers ──────────────────────────────────────────────────────────────
 
 const THEME_CSS_VAR_MAP: Record<keyof ClinicTheme, string> = {
   coral: '--coral',

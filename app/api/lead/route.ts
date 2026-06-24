@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getClinicConfig } from '@/lib/clinics'
+import { getClinicOrDefault } from '@/lib/clinic-store'
 
 interface LeadPayload {
   name: string
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data } = result
-  const clinicConfig = getClinicConfig(data.clinic)
+  const clinicConfig = await getClinicOrDefault(data.clinic)
   console.log('[LEAD]', new Date().toISOString(), clinicConfig.slug, JSON.stringify(data, null, 2))
 
   // Forward to this clinic's webhook if it has one, else fall back to the global LEAD_WEBHOOK_URL.
