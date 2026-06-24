@@ -11,8 +11,15 @@ const BLOB_KEY = 'clinics/clinics.json'
 const TTL_MS = 30_000
 let cache: { data: ClinicConfig[]; at: number } | null = null
 
+// Vercel can authenticate Blob either via a static BLOB_READ_WRITE_TOKEN or,
+// for stores connected through "Connect Database", via OIDC using BLOB_STORE_ID
+// plus the platform's auto-injected VERCEL_OIDC_TOKEN.
+export function isBlobConfigured(): boolean {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID)
+}
+
 function hasBlob(): boolean {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+  return isBlobConfigured()
 }
 
 async function readBlob(): Promise<ClinicConfig[] | null> {
