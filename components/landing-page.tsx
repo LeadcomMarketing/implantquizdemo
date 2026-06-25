@@ -1,6 +1,17 @@
 "use client"
 
-import { Phone, Check, Shield, Star, CheckCircle } from "lucide-react"
+import {
+  Phone,
+  Check,
+  Shield,
+  Star,
+  CheckCircle,
+  Stethoscope,
+  Scan,
+  MessageCircle,
+  ClipboardList,
+  HandCoins,
+} from "lucide-react"
 import {
   PROCESS_STEPS,
   PRICING_CARDS,
@@ -22,6 +33,9 @@ interface LandingPageProps {
 export function LandingPage({ clinic, onOpenModal }: LandingPageProps) {
   return (
     <div className="animate-landing-in">
+      {/* Included Section */}
+      <IncludedSection onOpenModal={onOpenModal} />
+
       {/* Steps Section */}
       <StepsSection onOpenModal={onOpenModal} />
 
@@ -49,6 +63,121 @@ export function LandingPage({ clinic, onOpenModal }: LandingPageProps) {
       {/* Footer */}
       <Footer clinic={clinic} />
     </div>
+  )
+}
+
+// Included Section
+const INCLUDED_ITEMS = [
+  {
+    icon: Stethoscope,
+    title: "Undersökning",
+    description:
+      "Vi gör en grundlig klinisk undersökning av dina tänder, ditt tandkött och din käke för att kartlägga din situation och se vilka behandlingsalternativ som passar dig bäst.",
+  },
+  {
+    icon: Scan,
+    title: "Röntgenbilder",
+    description:
+      "Med röntgenbilder ser vi benstruktur och rotsystem i detalj, vilket ger oss en säker grund för att planera ditt implantat med precision.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Konsultation",
+    description:
+      "Du får träffa en erfaren tandläkare som går igenom resultaten med dig, svarar på dina frågor och berättar om nästa steg – helt utan press att bestämma dig på plats.",
+  },
+]
+
+const INCLUDED_EXTRAS = [
+  {
+    icon: ClipboardList,
+    title: "Anpassad behandlingsplan",
+    description:
+      "Du får en plan skräddarsydd efter just din situation, med tydlig tidsplan och kostnad.",
+  },
+  {
+    icon: HandCoins,
+    title: "Information om bidrag och högkostnadsskydd",
+    description:
+      "Vi går igenom vilka bidrag och vilket högkostnadsskydd du kan använda för att sänka kostnaden.",
+  },
+]
+
+function IncludedSection({
+  onOpenModal,
+}: {
+  onOpenModal: (source: string) => void
+}) {
+  return (
+    <section className="py-16 md:py-20">
+      <div className="max-w-[1080px] mx-auto px-4 md:px-6">
+        <div className="text-center max-w-[640px] mx-auto mb-10 reveal">
+          <div className="text-xs font-bold tracking-[0.14em] uppercase text-coral-deep mb-3">
+            Det här ingår
+          </div>
+          <h2 className="font-display font-semibold text-[clamp(26px,4.4vw,38px)] text-ink">
+            En komplett genomgång, helt kostnadsfritt
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 reveal">
+          {INCLUDED_ITEMS.map((item) => {
+            const Icon = item.icon
+            return (
+              <div
+                key={item.title}
+                className="bg-surface border border-border rounded-[var(--r-sm)] p-6"
+              >
+                <div className="w-[46px] h-[46px] rounded-[12px] bg-coral-soft text-coral-deep grid place-items-center mb-3.5">
+                  <Icon className="w-[22px] h-[22px]" />
+                </div>
+                <h3 className="font-display font-semibold text-lg">
+                  {item.title}
+                </h3>
+                <p className="text-[13.5px] text-muted mt-2 leading-[1.55]">
+                  {item.description}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="mt-5 border border-border-strong border-dashed rounded-[var(--r-sm)] p-5 reveal">
+          <div className="text-[11px] font-bold tracking-[0.1em] uppercase text-muted mb-3.5">
+            Dessutom ingår
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {INCLUDED_EXTRAS.map((item) => {
+              const Icon = item.icon
+              return (
+                <div key={item.title} className="flex gap-3 items-start">
+                  <div className="w-[34px] h-[34px] rounded-[10px] bg-gold-soft text-gold-deep grid place-items-center flex-shrink-0">
+                    <Icon className="w-[17px] h-[17px]" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-[14.5px]">
+                      {item.title}
+                    </div>
+                    <p className="text-[13px] text-muted mt-0.5 leading-[1.5]">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="text-center mt-9">
+          <button
+            onClick={() => onOpenModal("included")}
+            className="btn-gold py-4 px-7 text-[17px]"
+          >
+            Boka din kostnadsfria konsultation
+          </button>
+        </div>
+      </div>
+    </section>
   )
 }
 
