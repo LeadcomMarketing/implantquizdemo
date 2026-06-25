@@ -140,95 +140,13 @@ export function ToothIllustration({
   }
 }
 
-// Process step illustrations
-export function Step1Illustration() {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-16 h-16 text-coral"
-    >
-      {/* Tooth being removed */}
-      <path d="M22 14c-5 0-8 4-7 10 1 7 1 9 3 16 1 4 2 8 5 8s2-7 5-7" />
-      <path d="M42 14c5 0 8 4 7 10-1 7-1 9-3 16-1 4-2 8-5 8" opacity="0.4" />
-      {/* X marks removal */}
-      <path d="M30 44l8 8M38 44l-8 8" className="text-coral-deep" />
-    </svg>
-  )
-}
-
-export function Step2Illustration() {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-16 h-16 text-coral"
-    >
-      {/* Titanium screw */}
-      <path d="M32 8v34" />
-      <path d="M26 14h12M25 20h14M27 26h10M28 32h8" />
-      {/* Screw tip */}
-      <path d="M32 42l-4 8h8l-4-8Z" />
-    </svg>
-  )
-}
-
-export function Step3Illustration() {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-16 h-16 text-coral"
-    >
-      {/* Abutment */}
-      <rect x="26" y="10" width="12" height="14" rx="3" />
-      <path d="M32 24v6" />
-      {/* Base */}
-      <path d="M27 30h10v22c0 4-10 4-10 0V30Z" />
-    </svg>
-  )
-}
-
-export function Step4Illustration() {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-16 h-16 text-coral"
-    >
-      {/* Complete tooth crown */}
-      <path d="M24 14c-5 0-7 4-6 10 1 7 1 10 3 17 1 4 2 7 5 7s3-9 6-9 3 9 6 9 4-3 5-7c2-7 2-10 3-17 1-6-1-10-6-10-4 0-6 3-8 3s-4-3-8-3Z" />
-    </svg>
-  )
-}
-
+// Process step illustrations — real product photos, one per step
 export function ProcessStepIllustration({ step }: { step: 1 | 2 | 3 | 4 }) {
-  switch (step) {
-    case 1:
-      return <Step1Illustration />
-    case 2:
-      return <Step2Illustration />
-    case 3:
-      return <Step3Illustration />
-    case 4:
-      return <Step4Illustration />
-    default:
-      return null
-  }
+  return (
+    <img
+      src={`/step-${step}.png`}
+      alt=""
+      className="w-full h-full object-contain p-4"
+    />
+  )
 }
