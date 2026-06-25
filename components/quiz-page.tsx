@@ -80,8 +80,8 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
                     {hero.eyebrow}
                   </span>
                   <p className={cn(
-                    'font-display font-semibold text-ink leading-[1.08] text-balance transition-all duration-300',
-                    isFirst ? 'text-[clamp(32px,5.5vw,58px)] max-w-[18ch]' : 'text-[clamp(20px,3.4vw,26px)] max-w-[24ch] leading-[1.18] font-medium'
+                    'font-display font-semibold text-ink text-balance transition-all duration-300',
+                    isFirst ? 'text-[clamp(24px,4.2vw,44px)] max-w-[30ch] leading-[1.12]' : 'text-[clamp(20px,3.4vw,26px)] max-w-[24ch] leading-[1.18] font-medium'
                   )}>
                     {hero.headline}
                   </p>
