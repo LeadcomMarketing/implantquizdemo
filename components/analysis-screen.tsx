@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { ChevronLeft, Check, Sparkles } from "lucide-react"
+import { ChevronLeft, Check, Sparkles, Stethoscope, Scan, MessageCircle } from "lucide-react"
 import type { ClinicConfig, QuizAnswers } from "@/lib/types"
 import { CONDITION_DESCRIPTIONS, URGENCY_MESSAGES } from "@/lib/constants"
 
@@ -146,6 +146,25 @@ export function AnalysisScreen({
 
         {/* Offer box */}
         <div className="mt-5 text-center bg-ink text-white rounded-[var(--r-sm)] py-6 px-5">
+          <div className="mb-5 inline-flex flex-col gap-2 text-left">
+            <div className="text-[11px] font-bold tracking-[0.1em] uppercase text-[#B7ACA0]">
+              Detta ingår
+            </div>
+            <ul className="grid gap-1.5">
+              <li className="flex items-center gap-2 text-[14.5px] text-[#E7DFD4]">
+                <Stethoscope className="w-[16px] h-[16px] text-gold flex-shrink-0" />
+                Undersökning
+              </li>
+              <li className="flex items-center gap-2 text-[14.5px] text-[#E7DFD4]">
+                <Scan className="w-[16px] h-[16px] text-gold flex-shrink-0" />
+                Röntgenbilder
+              </li>
+              <li className="flex items-center gap-2 text-[14.5px] text-[#E7DFD4]">
+                <MessageCircle className="w-[16px] h-[16px] text-gold flex-shrink-0" />
+                Konsultation
+              </li>
+            </ul>
+          </div>
           <div className="font-display font-semibold text-[15px] text-[#E7DFD4]">
             <s className="text-muted-2" style={{ textDecorationThickness: "2px" }}>
               Ordinarie pris {ordinaryPrice}
