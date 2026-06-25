@@ -18,7 +18,6 @@ import {
   REASONS,
   TESTIMONIALS,
   FAQ_ITEMS,
-  FOOTER_LINKS,
 } from "@/lib/constants"
 import type { ClinicConfig } from "@/lib/types"
 import { ProcessStepIllustration } from "./illustrations"
@@ -549,98 +548,38 @@ function FinalCTASection({
 
 // Footer
 function Footer({ clinic }: { clinic: ClinicConfig }) {
-  const companyLinks = [
-    "Kontakta oss",
-    "Karriär",
-    "Tandvårdsbidrag",
-    clinic.phone,
-    clinic.email,
-  ]
-
   return (
     <footer className="bg-ink text-[#C9BFB3] mt-16 py-12 pb-8">
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div>
-            <img
-              src={clinic.logoUrl}
-              alt={clinic.name}
-              className="h-7 w-auto brightness-0 invert"
-            />
-            <p className="text-[13.5px] mt-3.5 max-w-[30ch]">
-              Modern tandvård med fokus på trygghet, kvalitet och
-              tillgänglighet.
+        <div className="flex flex-col items-center text-center gap-3.5">
+          <img
+            src={clinic.logoUrl}
+            alt={clinic.name}
+            className="h-7 w-auto brightness-0 invert"
+          />
+          <p className="text-[13.5px] max-w-[40ch]">
+            Modern tandvård med fokus på trygghet, kvalitet och
+            tillgänglighet.
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[13.5px]">
+            <a
+              href={`tel:${clinic.phoneTel}`}
+              className="text-[#B7ACA0] no-underline hover:text-white transition-colors"
+            >
+              {clinic.phone}
+            </a>
+            <a
+              href={`mailto:${clinic.email}`}
+              className="text-[#B7ACA0] no-underline hover:text-white transition-colors"
+            >
+              {clinic.email}
+            </a>
+          </div>
+          {clinic.orgNumber && (
+            <p className="text-[12px] text-[#8E8479]">
+              Org.nr: {clinic.orgNumber}
             </p>
-            {clinic.orgNumber && (
-              <p className="text-[12px] text-[#8E8479] mt-3">
-                Org.nr: {clinic.orgNumber}
-              </p>
-            )}
-          </div>
-
-          {/* Treatments */}
-          <div>
-            <h4 className="text-white font-semibold text-[13px] tracking-[0.04em] mb-3.5">
-              Behandlingar
-            </h4>
-            <ul className="list-none space-y-1">
-              {FOOTER_LINKS.treatments.map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="text-[#B7ACA0] text-[13.5px] leading-8 no-underline hover:text-white transition-colors"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Clinics */}
-          <div>
-            <h4 className="text-white font-semibold text-[13px] tracking-[0.04em] mb-3.5">
-              Kliniker
-            </h4>
-            <ul className="list-none space-y-1">
-              {FOOTER_LINKS.clinics.map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="text-[#B7ACA0] text-[13.5px] leading-8 no-underline hover:text-white transition-colors"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-white font-semibold text-[13px] tracking-[0.04em] mb-3.5">
-              Företaget
-            </h4>
-            <ul className="list-none space-y-1">
-              {companyLinks.map((item) => (
-                <li key={item}>
-                  <a
-                    href={
-                      item.includes("@")
-                        ? `mailto:${item}`
-                        : item.match(/^\d/)
-                          ? `tel:${clinic.phoneTel}`
-                          : "#"
-                    }
-                    className="text-[#B7ACA0] text-[13.5px] leading-8 no-underline hover:text-white transition-colors"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
         </div>
 
         <div className="border-t border-white/10 mt-8 pt-5 text-center text-[12.5px] text-[#8E8479]">
