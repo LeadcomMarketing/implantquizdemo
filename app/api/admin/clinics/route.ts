@@ -30,6 +30,13 @@ function parseTheme(v: unknown): ClinicTheme | undefined {
   return Object.keys(out).length ? out : undefined
 }
 
+function parseRating(v: unknown): number | undefined {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = Number(v)
+  if (!Number.isFinite(n)) return undefined
+  return Math.min(5, Math.max(0, n))
+}
+
 function parseReviews(v: unknown): ClinicReview[] | undefined {
   if (!Array.isArray(v)) return undefined
   const out: ClinicReview[] = []
@@ -82,6 +89,8 @@ function parseClinic(body: unknown): { ok: true; data: ClinicConfig } | { ok: fa
       monthlyFromPrice: str(b.monthlyFromPrice) || undefined,
       openingHours: str(b.openingHours) || undefined,
       orgNumber: str(b.orgNumber) || undefined,
+      googleRating: parseRating(b.googleRating),
+      showGoogleRating: b.showGoogleRating !== false,
     },
   }
 }

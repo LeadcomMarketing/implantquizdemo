@@ -16,6 +16,8 @@ export const DEFAULT_CLINIC: ClinicConfig = {
   ordinaryPrice: '1 590 kr',
   monthlyFromPrice: '300 kr',
   openingHours: 'Mån–Fre 08:00–17:00',
+  googleRating: 4.7,
+  showGoogleRating: true,
   // theme / reviews / webhookUrl / orgNumber intentionally omitted — uses the
   // built-in CSS defaults, the shared TESTIMONIALS list, and LEAD_WEBHOOK_URL
   // from env.
@@ -50,6 +52,8 @@ export const SEED_CLINICS: ClinicConfig[] = [
     ordinaryPrice: '1 590 kr',
     monthlyFromPrice: '300 kr',
     openingHours: 'Mån–Fre 08:00–17:00',
+    googleRating: 4.7,
+    showGoogleRating: true,
   },
 ]
 

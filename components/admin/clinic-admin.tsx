@@ -30,6 +30,8 @@ function emptyClinic(): ClinicConfig {
     monthlyFromPrice: '',
     openingHours: '',
     orgNumber: '',
+    googleRating: undefined,
+    showGoogleRating: true,
   }
 }
 
@@ -311,6 +313,31 @@ export function ClinicAdmin({
                     onChange={(e) => set('monthlyFromPrice', e.target.value)}
                   />
                 </Field>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 items-end">
+                <Field label="Google-betyg (0–5)">
+                  <input
+                    type="number"
+                    min={0}
+                    max={5}
+                    step={0.1}
+                    className={inputCls}
+                    value={editing.googleRating ?? ''}
+                    placeholder="t.ex. 4.7"
+                    onChange={(e) =>
+                      set('googleRating', e.target.value === '' ? undefined : Number(e.target.value))
+                    }
+                  />
+                </Field>
+                <label className="flex items-center gap-2 pb-2.5 text-[14px] font-medium text-ink">
+                  <input
+                    type="checkbox"
+                    checked={editing.showGoogleRating !== false}
+                    onChange={(e) => set('showGoogleRating', e.target.checked)}
+                  />
+                  Visa Google-betyg på sidan
+                </label>
               </div>
 
               <Field label="Google Maps embed-URL">
