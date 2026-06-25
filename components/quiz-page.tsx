@@ -10,6 +10,7 @@ import { AnalysisScreen } from '@/components/analysis-screen'
 import { LandingPage } from '@/components/landing-page'
 import { SiteHeader } from '@/components/site-header'
 import { OptInModal } from '@/components/opt-in-modal'
+import { GoogleRatingBadge } from '@/components/google-rating-badge'
 import { CAMPAIGNS, DEFAULT_CAMPAIGN } from '@/lib/campaigns'
 import { DEFAULT_CLINIC } from '@/lib/clinics'
 import type { ClinicConfig } from '@/lib/types'
@@ -112,13 +113,7 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
 
             {/* Trust badges */}
             <div className="flex flex-wrap gap-2 justify-center mt-5 max-w-[640px] mx-auto">
-              {clinic.showGoogleRating !== false && (
-                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink bg-surface border border-border py-2 px-3.5 rounded-full" style={{ boxShadow: 'var(--shadow)' }}>
-                  <span className="text-gold-deep tracking-[1px]">★★★★★</span>{' '}
-                  {(clinic.googleRating ?? 4.7).toFixed(1).replace('.', ',')}/5 på{' '}
-                  <b className="font-display" style={{ color: '#4285F4' }}>G</b>
-                </span>
-              )}
+              <GoogleRatingBadge clinic={clinic} />
               <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink bg-surface border border-border py-2 px-3.5 rounded-full" style={{ boxShadow: 'var(--shadow)' }}>
                 <Check className="w-[15px] h-[15px] text-coral" />
                 Livstidsgaranti på implantatet

@@ -12,6 +12,7 @@ import {
 import type { ClinicConfig } from "@/lib/types"
 import { ProcessStepIllustration } from "./illustrations"
 import { FAQAccordion } from "./faq-accordion"
+import { GoogleRatingBadge } from "./google-rating-badge"
 
 interface LandingPageProps {
   clinic: ClinicConfig
@@ -416,6 +417,9 @@ function FinalCTASection({
                 {clinic.phone}
               </a>
             </span>
+          </div>
+          <div className="flex justify-center mt-4">
+            <GoogleRatingBadge clinic={clinic} />
           </div>
         </div>
       </div>
