@@ -408,15 +408,6 @@ function FinalCTASection({
             >
               Boka din kostnadsfria konsultation
             </button>
-            <span className="text-muted text-[14.5px]">
-              Eller ring:{" "}
-              <a
-                href={`tel:${clinic.phoneTel}`}
-                className="text-coral-deep font-semibold no-underline"
-              >
-                {clinic.phone}
-              </a>
-            </span>
           </div>
           <div className="flex justify-center mt-4">
             <GoogleRatingBadge clinic={clinic} />

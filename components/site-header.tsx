@@ -1,6 +1,5 @@
 "use client"
 
-import { Phone } from "lucide-react"
 import type { ClinicConfig, QuizPhase } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -38,15 +37,6 @@ export function SiteHeader({ clinic, phase, onOpenModal }: SiteHeaderProps) {
               showFullHeader ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
           >
-            {/* Phone link */}
-            <a
-              href={`tel:${clinic.phoneTel}`}
-              className="flex items-center gap-1.5 text-ink no-underline font-semibold text-[14.5px] whitespace-nowrap"
-            >
-              <Phone className="w-[17px] h-[17px] text-coral" />
-              <span className="hidden sm:inline">{clinic.phone}</span>
-            </a>
-
             {/* CTA Button */}
             <button
               onClick={onOpenModal}
