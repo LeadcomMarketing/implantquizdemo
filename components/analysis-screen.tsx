@@ -179,7 +179,7 @@ export function AnalysisScreen({
             Boka din kostnadsfria konsultation
           </button>
           <div className="mt-3 text-xs text-[#B7ACA0]">
-            Gratis &amp; utan förbindelse · Svar inom 24 timmar
+            Gratis &amp; utan förbindelse
           </div>
         </div>
 
