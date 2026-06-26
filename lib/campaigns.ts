@@ -46,7 +46,7 @@ export const CAMPAIGNS: Record<string, Campaign> = {
   general: {
     key: 'general',
     hero: {
-      eyebrow: 'Gratis analys · tar 60 sekunder',
+      eyebrow: 'Gratis analys · tar 2 minuter',
       headline: 'Ta reda på om tandimplantat är rätt för dig – och få ett fast pris från 300 kr/mån.',
       sub: '',
     },
@@ -59,7 +59,7 @@ export const CAMPAIGNS: Record<string, Campaign> = {
     hero: {
       eyebrow: 'Ny reform · Tiotandvården 2025',
       headline: 'Staten betalar upp till 90 % av ditt tandimplantat – om du är 67 eller äldre.',
-      sub: 'Ta reda på vad du har rätt till. Gratis analys på 60 sekunder.',
+      sub: 'Ta reda på om du har rätt till bidraget - och om du är en bra kandidat för tandimplantat. Gratis analys på 2 minuter.',
     },
     questions: withAgeQuestion(QUIZ_QUESTIONS),
   },
