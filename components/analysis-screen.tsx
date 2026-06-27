@@ -5,6 +5,51 @@ import { ChevronLeft, Check, Sparkles, Stethoscope, Scan, MessageCircle } from "
 import type { ClinicConfig, QuizAnswers } from "@/lib/types"
 import { CONDITION_DESCRIPTIONS, URGENCY_MESSAGES } from "@/lib/constants"
 
+// Tiotandvården (67+) eligibility breakdown — only shown when the quiz
+// included the age-screening question (i.e. campaign ?v=67).
+const SUBSIDY_INFO = {
+  over: {
+    title: "Du uppfyller ålderskravet för Tiotandvården!",
+    intro:
+      "Goda nyheter! Baserat på din ålder har du rätt till det nya statliga stödet Tiotandvården. Det innebär att staten går in och täcker hela 90 % av referenspriset för vissa behandlingar, vilket gör vägen till ett komplett leende betydligt billigare.",
+    intro2:
+      "När det gäller just tandimplantat och fasta tänder finns det dock vissa kliniska villkor som avgör exakt hur mycket du sparar:",
+    bullets: [
+      {
+        label: "Tänder framtill i munnen (position 1–5):",
+        text: "Om du behöver ersätta saknade tänder i den främre delen av munnen betalar du vanligtvis bara 10 % av referenspriset för själva implantatet och kronan.",
+      },
+      {
+        label: "Tänder längre bak (kindtänder):",
+        text: "För implantat långt bak i munnen gäller istället det vanliga, ordinarie högkostnadsskyddet (där staten täcker mellan 50 % och 85 % av kostnaden efter att du passerat grundbeloppet).",
+      },
+    ],
+    nextStepLabel: "Nästa steg för att få ditt exakta pris:",
+    nextStep:
+      "Eftersom resten av dina svar visar att du är en bra kandidat för implantat, behöver en tandläkare titta på din mun för att se exakt vilka tandpositioner som ska ersättas. Boka en tid för en undersökning hos oss idag, så skräddarsyr vi din behandlingsplan och räknar ut exakt hur mycket Tiotandvården drar av på ditt slutpris!",
+  },
+  under: {
+    title: "Goda chanser till implantat via det ordinarie högkostnadsskyddet!",
+    intro:
+      'Eftersom du är under 67 år omfattas du inte av det nya "Tiotandvården"-stödet. Men oroa dig inte – dina svar i quizzet visar att du fortfarande har mycket goda förutsättningar för att få tandimplantat, och du är helt skyddad av Sveriges mycket generösa ordinarie statliga högkostnadsskydd.',
+    intro2:
+      "När du gör en större behandling som tandimplantat fungerar det statliga skyddet så här:",
+    bullets: [
+      {
+        label: "Staten betalar mer ju mer du gör:",
+        text: "Du betalar 100 % själv upp till 3 000 kr (enligt statens referenspriser). För kostnader mellan 3 001 kr och 15 000 kr drar staten av 50 %, och för alla kostnader som överstiger 15 000 kr under ett och samma år betalar staten hela 85 %.",
+      },
+      {
+        label: "Gäller hela munnen:",
+        text: "Till skillnad från Tiotandvården har det vanliga högkostnadsskyddet inte samma strikta uppdelning mellan främre och bakre tänder när det kommer till implantat.",
+      },
+    ],
+    nextStepLabel: "Nästa steg för att se din nettokostnad:",
+    nextStep:
+      "För att vi ska kunna räkna ut exakt hur mycket det statliga högkostnadsskyddet täcker i just ditt fall, behöver vi göra en klinisk undersökning och ta digitala röntgenbilder. Boka en tid hos oss redan idag, så tar vi fram ett exakt kostnadsförslag och hjälper dig att få tillbaka ett starkt och tryggt bett!",
+  },
+} as const
+
 interface AnalysisScreenProps {
   answers: QuizAnswers
   clinic: ClinicConfig
@@ -85,6 +130,16 @@ export function AnalysisScreen({
   // Get urgency-based next step message
   const urgencyMessage = URGENCY_MESSAGES[answers.urgency] || ""
 
+  // Tiotandvården subsidy breakdown — only present when the quiz included
+  // the age-screening question (campaign ?v=67)
+  const subsidyVariant =
+    answers.age_group === "under67"
+      ? "under"
+      : answers.age_group
+        ? "over"
+        : null
+  const subsidyInfo = subsidyVariant ? SUBSIDY_INFO[subsidyVariant] : null
+
   return (
     <div className="max-w-[680px] mx-auto bg-surface border border-border rounded-[var(--r)] overflow-hidden p-5 md:p-7" style={{ boxShadow: "var(--shadow-lg)" }}>
       <div className="stagger">
@@ -140,6 +195,44 @@ export function AnalysisScreen({
               <div className="text-[13.5px] text-[#3c6b52] leading-[1.45]">
                 {urgencyMessage}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tiotandvården subsidy breakdown (67+ campaign only) */}
+        {subsidyInfo && (
+          <div className="mt-4 border border-border rounded-[var(--r-sm)] overflow-hidden">
+            <div className="bg-gradient-to-b from-[#FFF7EF] to-[#FFEFE7] px-4 py-4 border-b border-border">
+              <div className="text-[11px] font-bold tracking-[0.12em] uppercase text-coral-deep">
+                Preliminärt svar
+              </div>
+              <div className="font-display font-semibold text-[19px] mt-1">
+                {subsidyInfo.title}
+              </div>
+            </div>
+            <div className="p-4 grid gap-3">
+              <p className="text-[14.5px] text-ink leading-[1.55]">
+                {subsidyInfo.intro}
+              </p>
+              <p className="text-[14.5px] text-ink leading-[1.55]">
+                {subsidyInfo.intro2}
+              </p>
+              <ul className="list-none grid gap-3">
+                {subsidyInfo.bullets.map((bullet) => (
+                  <li
+                    key={bullet.label}
+                    className="flex gap-3 items-start text-[14.5px] text-ink"
+                  >
+                    <Check className="flex-shrink-0 w-[17px] h-[17px] text-green mt-0.5" />
+                    <span>
+                      <b>{bullet.label}</b> {bullet.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-[14.5px] text-ink leading-[1.55]">
+                <b>{subsidyInfo.nextStepLabel}</b> {subsidyInfo.nextStep}
+              </p>
             </div>
           </div>
         )}
