@@ -32,6 +32,7 @@ function emptyClinic(): ClinicConfig {
     orgNumber: '',
     googleRating: undefined,
     showGoogleRating: true,
+    bookingWidgetUrl: '',
   }
 }
 
@@ -356,6 +357,20 @@ export function ClinicAdmin({
                   placeholder="https://..."
                   onChange={(e) => set('webhookUrl', e.target.value)}
                 />
+              </Field>
+
+              <Field label="Bokningswidget-URL (Varden, steg 2 i formuläret)">
+                <textarea
+                  className={inputCls + ' min-h-[70px] resize-y'}
+                  value={editing.bookingWidgetUrl ?? ''}
+                  placeholder="https://www.varden.se/booking-widget?entrypoint=...&widgetId=...&defaultClinicId=...&careServiceId=..."
+                  onChange={(e) => set('bookingWidgetUrl', e.target.value)}
+                />
+                <p className="text-[12px] text-muted mt-1.5">
+                  Klistra in <code>src</code>-URL:en från Vardens widget-kod (länken inuti{' '}
+                  <code>vardenWidgetModalContent</code>-diven) — inte hela snippet med taggar.
+                  Lämna tomt om kliniken inte har bokningskalender ännu.
+                </p>
               </Field>
 
               {/* Theme */}

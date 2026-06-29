@@ -91,6 +91,7 @@ function parseClinic(body: unknown): { ok: true; data: ClinicConfig } | { ok: fa
       orgNumber: str(b.orgNumber) || undefined,
       googleRating: parseRating(b.googleRating),
       showGoogleRating: b.showGoogleRating !== false,
+      bookingWidgetUrl: str(b.bookingWidgetUrl) || undefined,
     },
   }
 }

@@ -130,4 +130,11 @@ export interface ClinicConfig {
   googleRating?: number
   /** Whether to show the Google rating trust badge at all. Defaults to true. */
   showGoogleRating?: boolean
+  /**
+   * Iframe src URL for this clinic's Varden booking widget (step 2 of the
+   * opt-in modal). Extracted from the `src` attribute on the
+   * `.vardenWidgetModalContent` div in Varden's embed snippet — not the
+   * whole snippet. Omit to skip the calendar step.
+   */
+  bookingWidgetUrl?: string
 }

@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { X, Check } from "lucide-react"
+import { X, CalendarClock, ShieldAlert } from "lucide-react"
 import type { QuizAnswers, LeadData, ClinicConfig } from "@/lib/types"
 import { cn } from "@/lib/utils"
+
+type ModalStep = "form" | "booking"
 
 interface OptInModalProps {
   isOpen: boolean
@@ -27,7 +29,7 @@ export function OptInModal({
     consent: false,
   })
   const [errors, setErrors] = useState<Record<string, boolean>>({})
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [step, setStep] = useState<ModalStep>("form")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const modalRef = useRef<HTMLDivElement>(null)
@@ -64,7 +66,7 @@ export function OptInModal({
       setTimeout(() => {
         setFormData({ name: "", phone: "", email: "", consent: false })
         setErrors({})
-        setIsSuccess(false)
+        setStep("form")
       }, 200)
     }
   }, [isOpen])
@@ -117,13 +119,12 @@ export function OptInModal({
 
     try {
       await submitLead(leadData)
-      setIsSuccess(true)
     } catch (err) {
       console.error('Lead submission error:', err)
-      // Show success to preserve UX; the API logs the lead server-side
-      setIsSuccess(true)
+      // Still advance to booking; the API logs the lead server-side
     } finally {
       setIsSubmitting(false)
+      setStep("booking")
     }
   }
 
@@ -164,24 +165,55 @@ export function OptInModal({
           </button>
 
           <div className="text-[11px] font-bold tracking-[0.13em] uppercase text-coral-deep">
-            Kostnadsfri konsultation
+            {step === "form" ? "Kostnadsfri konsultation" : "Sista steget"}
           </div>
           <h3
             id="modal-title"
             className="font-display font-semibold text-2xl mt-1.5"
           >
-            {source === "analysis"
-              ? "Boka din kostnadsfria bedömning"
-              : "Boka din gratis konsultation"}
+            {step === "form"
+              ? source === "analysis"
+                ? "Boka din kostnadsfria bedömning"
+                : "Boka din gratis konsultation"
+              : `Välj en tid${firstName ? `, ${firstName}` : ""}`}
           </h3>
-          <div className="mt-2.5 text-[15px] text-muted">
-            <s className="text-muted-2">Ordinarie pris {clinic.ordinaryPrice || "1 590 kr"}</s> &rarr;{" "}
-            <b className="text-coral-deep font-display">0 kr idag</b>
+          {step === "form" ? (
+            <div className="mt-2.5 text-[15px] text-muted">
+              <s className="text-muted-2">Ordinarie pris {clinic.ordinaryPrice || "1 590 kr"}</s> &rarr;{" "}
+              <b className="text-coral-deep font-display">0 kr idag</b>
+            </div>
+          ) : (
+            <div className="mt-2.5 flex items-center justify-center gap-1.5 text-[13.5px] font-semibold text-coral-deep">
+              <ShieldAlert className="w-[16px] h-[16px] flex-shrink-0" />
+              Din plats är inte bokad ännu
+            </div>
+          )}
+
+          {/* Progress bar */}
+          <div className="mt-4">
+            <div className="flex justify-between items-baseline mb-1.5">
+              <span className="text-[10.5px] font-bold tracking-[0.12em] uppercase text-muted">
+                Steg {step === "form" ? 1 : 2} av 2
+              </span>
+              <span className="font-display font-semibold text-[12.5px] text-coral-deep">
+                {step === "form" ? 50 : 100}%
+              </span>
+            </div>
+            <div className="h-1.5 rounded-full bg-cream-2 overflow-hidden">
+              <div
+                className="h-full rounded-full progress-fill transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+                style={{ width: step === "form" ? "50%" : "100%" }}
+                role="progressbar"
+                aria-valuenow={step === "form" ? 50 : 100}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              />
+            </div>
           </div>
         </div>
 
         {/* Form */}
-        {!isSuccess && (
+        {step === "form" && (
           <div className="p-6 grid gap-3.5">
             {/* Name field */}
             <div className="field">
@@ -330,29 +362,36 @@ export function OptInModal({
           </div>
         )}
 
-        {/* Success state */}
-        {isSuccess && (
-          <div className="p-8 text-center">
-            <div className="w-[66px] h-[66px] rounded-full bg-green-soft text-green grid place-items-center mx-auto mb-4 shadow-[0_0_0_8px_#f0faf3] animate-pop">
-              <Check className="w-[34px] h-[34px]" strokeWidth={2.4} />
-            </div>
-            <h3 className="font-display font-semibold text-[23px]">
-              Tack{firstName ? ` ${firstName}` : ""}! Din förfrågan är skickad.
-            </h3>
-            <p className="text-muted text-[15px] mt-2.5">
-              En tandläkare på {clinic.name} ringer dig inom 24 timmar för att
-              boka in din kostnadsfria konsultation.
-            </p>
-            <div className="mt-4 text-sm">
-              Vill du inte vänta? Ring oss direkt:
-              <br />
-              <a
-                href={`tel:${clinic.phoneTel}`}
-                className="text-coral-deep font-bold font-display text-lg no-underline"
-              >
-                {clinic.phone}
-              </a>
-            </div>
+        {/* Booking step */}
+        {step === "booking" && (
+          <div className="p-5 md:p-6">
+            {clinic.bookingWidgetUrl ? (
+              <>
+                <div className="flex gap-2.5 items-start bg-coral-soft border border-[#F5D4C4] rounded-[var(--r-sm)] p-3 mb-4">
+                  <CalendarClock className="w-[18px] h-[18px] text-coral-deep flex-shrink-0 mt-0.5" />
+                  <p className="text-[13px] text-ink leading-[1.45]">
+                    Dina uppgifter är mottagna, men din tid är inte bokad än.{" "}
+                    <b>Välj en tid nedan för att säkra din plats.</b>
+                  </p>
+                </div>
+                <iframe
+                  src={clinic.bookingWidgetUrl}
+                  title="Boka en tid"
+                  className="w-full rounded-[var(--r-sm)] border border-border"
+                  style={{ height: "520px" }}
+                />
+              </>
+            ) : (
+              <div className="text-center py-3">
+                <h3 className="font-display font-semibold text-[21px]">
+                  Tack{firstName ? ` ${firstName}` : ""}! Din förfrågan är skickad.
+                </h3>
+                <p className="text-muted text-[15px] mt-2.5">
+                  Vi på {clinic.name} kontaktar dig inom 24 timmar för att boka
+                  in din kostnadsfria konsultation.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
