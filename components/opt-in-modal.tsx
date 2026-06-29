@@ -148,7 +148,8 @@ export function OptInModal({
       <div
         ref={modalRef}
         className={cn(
-          "bg-surface w-full max-w-[460px] rounded-[var(--r)] max-h-[92dvh] overflow-auto",
+          "bg-surface w-full rounded-[var(--r)] max-h-[94dvh] overflow-auto transition-[max-width] duration-200",
+          step === "booking" ? "max-w-[600px]" : "max-w-[460px]",
           "transform transition-transform duration-250 ease-[cubic-bezier(0.2,0.9,0.3,1)]",
           isOpen ? "translate-y-0 scale-100" : "translate-y-4 scale-[0.98]"
         )}
@@ -367,18 +368,16 @@ export function OptInModal({
           <div className="p-5 md:p-6">
             {clinic.bookingWidgetUrl ? (
               <>
-                <div className="flex gap-2.5 items-start bg-coral-soft border border-[#F5D4C4] rounded-[var(--r-sm)] p-3 mb-4">
-                  <CalendarClock className="w-[18px] h-[18px] text-coral-deep flex-shrink-0 mt-0.5" />
-                  <p className="text-[13px] text-ink leading-[1.45]">
-                    Dina uppgifter är mottagna, men din tid är inte bokad än.{" "}
-                    <b>Välj en tid nedan för att säkra din plats.</b>
+                <div className="flex gap-2 items-center bg-coral-soft border border-[#F5D4C4] rounded-[var(--r-sm)] py-2 px-3 mb-3">
+                  <CalendarClock className="w-[16px] h-[16px] text-coral-deep flex-shrink-0" />
+                  <p className="text-[12.5px] text-ink leading-[1.35]">
+                    Inte bokad än <b>– välj en tid nedan för att säkra din plats.</b>
                   </p>
                 </div>
                 <iframe
                   src={clinic.bookingWidgetUrl}
                   title="Boka en tid"
-                  className="w-full rounded-[var(--r-sm)] border border-border"
-                  style={{ height: "520px" }}
+                  className="w-full h-[72dvh] max-h-[680px] min-h-[420px] rounded-[var(--r-sm)] border border-border"
                 />
               </>
             ) : (
