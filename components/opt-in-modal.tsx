@@ -355,10 +355,8 @@ export function OptInModal({
             </button>
 
             {/* Note */}
-            <div className="text-center text-[12.5px] text-muted flex gap-2 justify-center flex-wrap items-center">
-              <span>Gratis &amp; utan förbindelse</span>
-              <span className="w-[3px] h-[3px] rounded-full bg-muted-2" />
-              <span>Svar inom 24 h</span>
+            <div className="text-center text-[12.5px] text-muted">
+              Inga dolda avgifter och helt kravfritt.
             </div>
           </div>
         )}
