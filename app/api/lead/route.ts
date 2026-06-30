@@ -60,14 +60,17 @@ export async function POST(req: NextRequest) {
   // Forward to this clinic's webhook if it has one, else fall back to the global LEAD_WEBHOOK_URL.
   const webhookUrl = clinicConfig.webhookUrl || process.env.LEAD_WEBHOOK_URL
   console.log('[LEAD] webhook target:', webhookUrl ?? '(none configured)')
-  // TODO: re-enable once a real webhook is configured
-  // if (webhookUrl) {
-  //   await fetch(webhookUrl, {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify(data),
-  //   })
-  // }
+  if (webhookUrl) {
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+    } catch (err) {
+      console.error('[LEAD] webhook delivery failed:', err)
+    }
+  }
 
   // TODO: Send to Meta Conversions API
   // const META_CAPI_TOKEN = process.env.META_CAPI_TOKEN
