@@ -379,6 +379,12 @@ export function OptInModal({
                   title="Boka en tid"
                   className="w-full h-[72dvh] max-h-[680px] min-h-[420px] rounded-[var(--r-sm)] border border-border"
                 />
+                <div className="mt-3 flex items-center gap-2.5 bg-[#FFF8E6] border border-[#F0D080] rounded-[var(--r-sm)] py-2.5 px-3.5">
+                  <span className="text-[18px] leading-none flex-shrink-0">⚠️</span>
+                  <p className="text-[13px] font-semibold text-[#7A5C00] leading-[1.4]">
+                    OBS: Ignorera priset på 199 kr ovan. Ditt pris är <span className="text-[#2E7D00]">0 kr</span>.
+                  </p>
+                </div>
               </>
             ) : (
               <div className="text-center py-3">
