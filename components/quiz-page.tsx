@@ -151,6 +151,7 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
         source={modalSource}
         quizAnswers={quiz.answers}
         clinic={clinic}
+        campaign={campaignKey === '67' ? 'quiz 67+' : 'quiz general'}
       />
     </div>
   )

@@ -43,6 +43,7 @@ export interface LeadData {
   source: string
   quizAnswers: QuizAnswers
   clinic: string
+  campaign: string
 }
 
 // Pricing Data

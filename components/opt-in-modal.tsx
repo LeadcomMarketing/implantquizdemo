@@ -13,6 +13,7 @@ interface OptInModalProps {
   source: string
   quizAnswers: QuizAnswers
   clinic: ClinicConfig
+  campaign: string
 }
 
 export function OptInModal({
@@ -21,6 +22,7 @@ export function OptInModal({
   source,
   quizAnswers,
   clinic,
+  campaign,
 }: OptInModalProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -115,6 +117,7 @@ export function OptInModal({
       source,
       quizAnswers,
       clinic: clinic.slug,
+      campaign,
     }
 
     try {

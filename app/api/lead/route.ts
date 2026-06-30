@@ -36,6 +36,7 @@ function validateLead(body: unknown): { valid: true; data: LeadPayload } | { val
         ? (b.quizAnswers as Record<string, string>)
         : {},
       clinic: typeof b.clinic === 'string' ? b.clinic : 'default',
+      campaign: typeof b.campaign === 'string' ? b.campaign : 'quiz general',
     },
   }
 }
