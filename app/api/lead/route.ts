@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
   const { data } = result
   const clinicConfig = await getClinicOrDefault(data.clinic)
-  const createdAt = new Date().toISOString().slice(0, 19) + 'Z'
+  const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ')
   console.log('[LEAD]', createdAt, clinicConfig.slug, JSON.stringify(data, null, 2))
 
   // Forward to this clinic's webhook if it has one, else fall back to the global LEAD_WEBHOOK_URL.
