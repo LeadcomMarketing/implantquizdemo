@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
 
   const { data } = result
   const clinicConfig = await getClinicOrDefault(data.clinic)
-  console.log('[LEAD]', new Date().toISOString(), clinicConfig.slug, JSON.stringify(data, null, 2))
+  const createdAt = new Date().toISOString()
+  console.log('[LEAD]', createdAt, clinicConfig.slug, JSON.stringify(data, null, 2))
 
   // Forward to this clinic's webhook if it has one, else fall back to the global LEAD_WEBHOOK_URL.
   const webhookUrl = clinicConfig.webhookUrl || process.env.LEAD_WEBHOOK_URL
@@ -65,7 +66,7 @@ export async function POST(req: NextRequest) {
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, createdAt }),
       })
     } catch (err) {
       console.error('[LEAD] webhook delivery failed:', err)
