@@ -120,6 +120,11 @@ export function OptInModal({
       campaign,
     }
 
+    // Fire FB Lead event as soon as the form is submitted
+    if (typeof window !== 'undefined' && typeof (window as unknown as { fbq?: unknown }).fbq === 'function') {
+      (window as unknown as { fbq: (...args: unknown[]) => void }).fbq('track', 'Lead')
+    }
+
     try {
       await submitLead(leadData)
     } catch (err) {
