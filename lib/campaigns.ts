@@ -57,9 +57,9 @@ export const CAMPAIGNS: Record<string, Campaign> = {
   '67': {
     key: '67',
     hero: {
-      eyebrow: 'Ny reform · Tiotandvården 2025',
+      eyebrow: 'Ny reform · Tiotandvården',
       headline: 'Staten betalar upp till 90 % av ditt tandimplantat – om du är 67 eller äldre.',
-      sub: 'Ta reda på om du har rätt till bidraget - och om du är en bra kandidat för tandimplantat. Gratis analys på 2 minuter.',
+      sub: 'Ta reda på om du <b>har rätt till</b> bidraget - och om du är en <b>bra kandidat</b> för tandimplantat. Gratis analys på 2 minuter.',
     },
     questions: withAgeQuestion(QUIZ_QUESTIONS),
   },

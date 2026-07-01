@@ -87,12 +87,13 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
                     {hero.headline}
                   </p>
                   {hero.sub && (
-                    <p className={cn(
-                      'text-muted text-balance transition-all duration-300',
-                      isFirst ? 'text-[17px] max-w-[36ch]' : 'text-[15px] max-w-[38ch]'
-                    )}>
-                      {hero.sub}
-                    </p>
+                    <p
+                      className={cn(
+                        'text-muted text-balance transition-all duration-300',
+                        isFirst ? 'text-[17px] max-w-[46ch]' : 'text-[15px] max-w-[48ch]'
+                      )}
+                      dangerouslySetInnerHTML={{ __html: hero.sub }}
+                    />
                   )}
                 </div>
               )
