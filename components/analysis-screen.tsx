@@ -112,8 +112,8 @@ export function AnalysisScreen({
       )
     }
 
-    // Payment
-    if (answers.payment === "yes" && answers.income === "yes") {
+    // Payment — skip the monthly price bullet for 67+ (subsidy changes the pricing picture)
+    if (answers.payment === "yes" && answers.income === "yes" && !answers.age_group) {
       result.push(
         `Du är öppen för delbetalning och har en inkomst – goda förutsättningar för en <b>räntefri betalplan från ${monthlyFromPrice}/mån</b>.`
       )
