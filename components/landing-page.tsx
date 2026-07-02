@@ -130,10 +130,10 @@ function IncludedSection({
                 <div className="w-[46px] h-[46px] rounded-[12px] bg-coral-soft text-coral-deep grid place-items-center mb-3.5">
                   <Icon className="w-[22px] h-[22px]" />
                 </div>
-                <h3 className="font-display font-semibold text-lg">
+                <h3 className="font-display font-semibold text-xl">
                   {item.title}
                 </h3>
-                <p className="text-[13.5px] text-muted mt-2 leading-[1.55]">
+                <p className="text-[15.5px] text-muted mt-2 leading-[1.55]">
                   {item.description}
                 </p>
               </div>
@@ -142,7 +142,7 @@ function IncludedSection({
         </div>
 
         <div className="mt-5 border border-border-strong border-dashed rounded-[var(--r-sm)] p-5 reveal">
-          <div className="text-[11px] font-bold tracking-[0.1em] uppercase text-muted mb-3.5">
+          <div className="text-[12.5px] font-bold tracking-[0.1em] uppercase text-muted mb-3.5">
             Dessutom ingår
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -154,10 +154,10 @@ function IncludedSection({
                     <Icon className="w-[17px] h-[17px]" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[14.5px]">
+                    <div className="font-semibold text-[16.5px]">
                       {item.title}
                     </div>
-                    <p className="text-[13px] text-muted mt-0.5 leading-[1.5]">
+                    <p className="text-[15px] text-muted mt-0.5 leading-[1.5]">
                       {item.description}
                     </p>
                   </div>
