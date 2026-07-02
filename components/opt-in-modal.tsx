@@ -392,71 +392,113 @@ export function OptInModal({
   )
 }
 
-// ─── Varden native widget trigger ────────────────────────────────────────────
-// Injects Varden's own script into the top-level page context so BankID works.
-// This replicates exactly what happident.se does — their widgetModalMulti.js
-// creates the modal and iframe itself, so deeplinks and popups are unrestricted.
+// ─── Varden native widget ─────────────────────────────────────────────────────
+// Runs Varden's own widget in the top-level page context (not an iframe we own),
+// exactly like happident.se does. Their script builds the modal + iframe and,
+// critically, listens for postMessage from the iframe to launch BankID via
+// window.location.href on the TOP page — which a cross-origin iframe cannot do.
+//
+// The public loader (widgetModalMulti.js) bails on `document.currentScript`,
+// which is null for dynamically injected scripts, so we load the implementation
+// (_impl/widgetModalMulti.js) directly. The DOM (modal divs + a trigger button)
+// must exist before it runs, since its init() binds handlers and builds the
+// iframe once, from whatever is present at load time.
 
-function VardenBookingTrigger({ url, firstName }: { url: string; firstName: string }) {
-  const [opened, setOpened] = useState(false)
+let vardenSetupPromise: Promise<string> | null = null
 
-  const openWidget = useCallback(() => {
-    let widgetId = 'w181'
+function setupVardenWidget(url: string): Promise<string> {
+  if (vardenSetupPromise) return vardenSetupPromise
+
+  vardenSetupPromise = new Promise<string>((resolve, reject) => {
+    let widgetId = "w181"
     try {
-      widgetId = new URL(url).searchParams.get('widgetId') ?? 'w181'
+      widgetId = new URL(url).searchParams.get("widgetId") ?? "w181"
     } catch {}
     const dataId = `${widgetId}-`
 
-    // Inject Varden CSS once
-    if (!document.getElementById('widget-modal-style')) {
-      const link = document.createElement('link')
-      link.id = 'widget-modal-style'
-      link.rel = 'stylesheet'
-      link.href = 'https://www.varden.se/booking-widget/widgetModalMulti.css'
+    // 1. Varden CSS
+    if (!document.getElementById("widget-modal-style")) {
+      const link = document.createElement("link")
+      link.id = "widget-modal-style"
+      link.rel = "stylesheet"
+      link.href = "https://www.varden.se/booking-widget/widgetModalMulti.css"
       document.head.appendChild(link)
     }
 
-    // Inject backdrop + modal divs once
+    // 2. Backdrop + modal + content (the content's src is what their init reads
+    //    to build the iframe)
     if (!document.querySelector(`.vardenWidgetModal[data-widget-id="${dataId}"]`)) {
-      const backdrop = document.createElement('div')
-      backdrop.className = 'vardenWidgetBackdrop varden-widget-hidden'
-      backdrop.setAttribute('data-widget-id', dataId)
+      const backdrop = document.createElement("div")
+      backdrop.className = "vardenWidgetBackdrop varden-widget-hidden"
+      backdrop.setAttribute("data-widget-id", dataId)
       document.body.appendChild(backdrop)
 
-      const modal = document.createElement('div')
-      modal.className = 'vardenWidgetModal varden-widget-hidden'
-      modal.setAttribute('data-widget-id', dataId)
+      const modal = document.createElement("div")
+      modal.className = "vardenWidgetModal varden-widget-hidden"
+      modal.setAttribute("data-widget-id", dataId)
 
-      const content = document.createElement('div')
-      content.className = 'vardenWidgetModalContent'
-      content.setAttribute('data-widget-id', dataId)
-      content.setAttribute('src', url)
+      const content = document.createElement("div")
+      content.className = "vardenWidgetModalContent"
+      content.setAttribute("data-widget-id", dataId)
+      content.setAttribute("src", url)
       modal.appendChild(content)
       document.body.appendChild(modal)
     }
 
-    const triggerOpen = () => {
-      const btn = document.createElement('button')
-      btn.setAttribute('data-widget-id', dataId)
-      btn.className = 'openVardenWidgetModalBtn'
-      btn.style.cssText = 'position:fixed;top:-9999px;left:-9999px;'
+    // 3. Hidden trigger button — must exist before init() so its click handler
+    //    gets bound. We click it programmatically to open the modal.
+    if (!document.getElementById("varden-hidden-trigger")) {
+      const btn = document.createElement("button")
+      btn.id = "varden-hidden-trigger"
+      btn.className = "openVardenWidgetModalBtn"
+      btn.setAttribute("data-widget-id", dataId)
+      btn.setAttribute("aria-hidden", "true")
+      btn.tabIndex = -1
+      btn.style.cssText = "position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;"
       document.body.appendChild(btn)
-      btn.click()
-      setTimeout(() => btn.remove(), 200)
-      setOpened(true)
     }
 
-    // Inject script (once); auto-trigger after load
-    if (!document.getElementById('widget-modal-script')) {
-      const script = document.createElement('script')
-      script.id = 'widget-modal-script'
-      script.src = 'https://www.varden.se/booking-widget/widgetModalMulti.js'
-      script.onload = triggerOpen
-      document.body.appendChild(script)
-    } else {
-      triggerOpen()
+    // 4. Load the implementation directly (bypassing the currentScript loader).
+    //    init() runs synchronously on execution, so by onload it has bound the
+    //    button, built the iframe, and added the message listener.
+    if (document.getElementById("widget-modal-impl")) {
+      resolve(dataId)
+      return
+    }
+    const script = document.createElement("script")
+    script.id = "widget-modal-impl"
+    script.src = `https://www.varden.se/booking-widget/_impl/widgetModalMulti.js?v=${Math.floor(
+      Date.now() / 300000
+    )}`
+    script.onload = () => resolve(dataId)
+    script.onerror = () => {
+      vardenSetupPromise = null
+      reject(new Error("Varden widget script failed to load"))
+    }
+    document.body.appendChild(script)
+  })
+
+  return vardenSetupPromise
+}
+
+function VardenBookingTrigger({ url, firstName }: { url: string; firstName: string }) {
+  const openCalendar = useCallback(async () => {
+    try {
+      const dataId = await setupVardenWidget(url)
+      const btn = document.querySelector<HTMLButtonElement>(
+        `.openVardenWidgetModalBtn[data-widget-id="${dataId}"]`
+      )
+      btn?.click()
+    } catch {
+      // Fallback: open the booking page in a new tab
+      window.open(url, "_blank", "noopener")
     }
   }, [url])
+
+  // Auto-open the calendar as soon as the booking step is shown
+  useEffect(() => {
+    openCalendar()
+  }, [openCalendar])
 
   return (
     <div className="text-center grid gap-4">
@@ -465,20 +507,15 @@ function VardenBookingTrigger({ url, firstName }: { url: string; firstName: stri
           Tack{firstName ? `, ${firstName}` : ""}! Ett sista steg.
         </h3>
         <p className="text-muted text-[15px] mt-2">
-          Din förfrågan är mottagen. Välj en tid i kalendern för att säkra din plats.
+          Välj en tid i kalendern som öppnas för att säkra din plats.
         </p>
       </div>
       <button
-        onClick={openWidget}
+        onClick={openCalendar}
         className="btn-gold w-full py-4 text-[16.5px]"
       >
-        {opened ? "Kalendern är öppen ↗" : "Välj din tid i kalendern →"}
+        Öppna kalendern →
       </button>
-      {opened && (
-        <p className="text-[12.5px] text-muted">
-          Bokningskalendern öppnades. Stäng detta fönster om du är klar.
-        </p>
-      )}
     </div>
   )
 }
