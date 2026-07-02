@@ -383,6 +383,8 @@ export function OptInModal({
                 <iframe
                   src={clinic.bookingWidgetUrl}
                   title="Boka en tid"
+                  allow="payment *; camera *; microphone *"
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals"
                   className="w-full h-[72dvh] max-h-[680px] min-h-[420px] rounded-[var(--r-sm)] border border-border"
                 />
                 <div className="mt-3 flex items-center gap-2.5 bg-[#FFF8E6] border border-[#F0D080] rounded-[var(--r-sm)] py-2.5 px-3.5">
