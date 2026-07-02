@@ -36,8 +36,12 @@ export function SiteHeader({ clinic, phase, onOpenModal }: SiteHeaderProps) {
               className="h-[26px] md:h-[30px] w-auto"
             />
             {clinic.city && (
-              <span className="text-[11px] md:text-[11.5px] font-light tracking-[0.22em] uppercase text-ink">
-                {clinic.city}
+              <span className="mt-1.5 flex flex-col items-center gap-1">
+                <span className="h-px w-6 bg-coral/50" />
+                <span className="text-[10.5px] md:text-[11px] font-light tracking-[0.24em] uppercase text-coral">
+                  {clinic.city}
+                </span>
+                <span className="h-px w-6 bg-coral/50" />
               </span>
             )}
           </a>
