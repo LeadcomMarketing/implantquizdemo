@@ -30,6 +30,7 @@ function emptyClinic(): ClinicConfig {
     monthlyFromPrice: '',
     openingHours: '',
     orgNumber: '',
+    city: '',
     googleRating: undefined,
     showGoogleRating: true,
     bookingWidgetUrl: '',
@@ -256,6 +257,15 @@ export function ClinicAdmin({
 
               <Field label="Namn">
                 <input className={inputCls} value={editing.name} onChange={(e) => set('name', e.target.value)} />
+              </Field>
+
+              <Field label="Stad (visas centrerad under logotypen i headern)">
+                <input
+                  className={inputCls}
+                  value={editing.city ?? ''}
+                  placeholder="t.ex. Göteborg"
+                  onChange={(e) => set('city', e.target.value)}
+                />
               </Field>
 
               <Field label="Logotyp-URL (sökväg i /public eller absolut URL)">

@@ -89,6 +89,7 @@ function parseClinic(body: unknown): { ok: true; data: ClinicConfig } | { ok: fa
       monthlyFromPrice: str(b.monthlyFromPrice) || undefined,
       openingHours: str(b.openingHours) || undefined,
       orgNumber: str(b.orgNumber) || undefined,
+      city: str(b.city) || undefined,
       googleRating: parseRating(b.googleRating),
       showGoogleRating: b.showGoogleRating !== false,
       bookingWidgetUrl: str(b.bookingWidgetUrl) || undefined,

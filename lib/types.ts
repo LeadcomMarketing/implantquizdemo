@@ -127,6 +127,8 @@ export interface ClinicConfig {
   openingHours?: string
   /** Swedish organisationsnummer, shown in the footer if set. */
   orgNumber?: string
+  /** City name shown under the logo in the header, e.g. "Göteborg". */
+  city?: string
   /** Google rating shown in the trust badge under the quiz, e.g. 4.7. Falls back to 4.7. */
   googleRating?: number
   /** Whether to show the Google rating trust badge at all. Defaults to true. */

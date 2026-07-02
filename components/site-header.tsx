@@ -20,20 +20,32 @@ export function SiteHeader({ clinic, phase, onOpenModal }: SiteHeaderProps) {
       )}
     >
       <div className="max-w-[1080px] mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between py-3 gap-3.5">
-          {/* Logo */}
-          <a href="#" className="flex items-center" aria-label={clinic.name}>
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center py-2.5 gap-2">
+          {/* Left spacer (balances the CTA column so the logo stays centered) */}
+          <div />
+
+          {/* Logo + city, centered */}
+          <a
+            href="#"
+            className="flex flex-col items-center gap-0.5"
+            aria-label={clinic.name}
+          >
             <img
               src={clinic.logoUrl}
               alt={clinic.name}
               className="h-[26px] md:h-[30px] w-auto"
             />
+            {clinic.city && (
+              <span className="text-[11px] md:text-[11.5px] font-bold tracking-[0.14em] uppercase text-coral-deep">
+                {clinic.city}
+              </span>
+            )}
           </a>
 
           {/* Right side - only visible in Phase 2 */}
           <div
             className={cn(
-              "flex items-center gap-3.5 transition-opacity duration-300",
+              "flex items-center justify-end gap-3.5 transition-opacity duration-300",
               showFullHeader ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
           >
