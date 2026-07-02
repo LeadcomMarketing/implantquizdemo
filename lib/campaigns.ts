@@ -15,7 +15,7 @@ const AGE_GROUP_QUESTION: QuizQuestion = {
   id: 'age_group',
   eyebrow: 'Fråga 1',
   type: 'text',
-  question: 'Hur gammal är du?',
+  question: 'Vilken åldersgrupp tillhör du?',
   subtext: 'Tiotandvården ger dig rätt till ett statligt bidrag – vi vill säkerställa att du får rätt information.',
   options: [
     { value: 'under67', label: 'Under 67 år' },
