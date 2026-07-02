@@ -33,10 +33,10 @@ export function SiteHeader({ clinic, phase, onOpenModal }: SiteHeaderProps) {
             <img
               src={clinic.logoUrl}
               alt={clinic.name}
-              className="h-[26px] md:h-[30px] w-auto"
+              className="h-[31px] md:h-[36px] w-auto"
             />
             {clinic.city && (
-              <span className="mt-1 text-[9px] md:text-[10px] font-medium tracking-[0.06em] md:tracking-[0.1em] uppercase text-coral/80 whitespace-nowrap">
+              <span className="mt-1 text-[12px] md:text-[13.5px] font-medium tracking-[0.06em] md:tracking-[0.1em] uppercase text-coral/80 whitespace-nowrap">
                 {clinic.city}
               </span>
             )}
