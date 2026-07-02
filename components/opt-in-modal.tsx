@@ -458,6 +458,14 @@ function setupVardenWidget(url: string): Promise<string> {
       document.body.appendChild(btn)
     }
 
+    // 3b. Price disclaimer banner — Varden's modal (z-index 99999) is entirely
+    //     their own DOM, so we can't inject anything inside it. Instead we
+    //     float a banner above it (higher z-index) and toggle it in sync with
+    //     the modal's own hidden/visible class via MutationObserver, so it
+    //     tracks the modal regardless of how it's opened or closed (X button,
+    //     backdrop click, or the BankID flow).
+    setupPriceBanner(dataId)
+
     // 4. Load the implementation directly (bypassing the currentScript loader).
     //    init() runs synchronously on execution, so by onload it has bound the
     //    button, built the iframe, and added the message listener.
@@ -479,6 +487,70 @@ function setupVardenWidget(url: string): Promise<string> {
   })
 
   return vardenSetupPromise
+}
+
+function setupPriceBanner(dataId: string) {
+  const modal = document.querySelector<HTMLElement>(`.vardenWidgetModal[data-widget-id="${dataId}"]`)
+  if (!modal) return
+
+  let banner = document.getElementById("varden-price-banner")
+  if (!banner) {
+    banner = document.createElement("div")
+    banner.id = "varden-price-banner"
+    banner.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -120%);
+      z-index: 100000;
+      width: min(92vw, 640px);
+      margin-top: max(10px, env(safe-area-inset-top));
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #FFF8E6;
+      border: 1px solid #F0D080;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      font-family: var(--font-body, sans-serif);
+      transition: transform 0.25s ease;
+      pointer-events: none;
+    `
+    banner.innerHTML = `
+      <span style="font-size:18px;line-height:1;flex-shrink:0;">⚠️</span>
+      <p style="margin:0;font-size:13px;font-weight:600;color:#7A5C00;line-height:1.4;">
+        OBS: Ignorera priset som visas i kalendern nedan. Ditt pris är <span style="color:#2E7D00;">0 kr</span>.
+      </p>
+    `
+    document.body.appendChild(banner)
+  }
+
+  const showBanner = () => {
+    banner!.style.transform = "translate(-50%, 0)"
+  }
+  const hideBanner = () => {
+    banner!.style.transform = "translate(-50%, -120%)"
+  }
+
+  // Sync with the modal's own visibility (toggled via the
+  // "varden-widget-hidden" class by Varden's script)
+  if (!modal.hasAttribute("data-price-banner-observed")) {
+    modal.setAttribute("data-price-banner-observed", "true")
+    const observer = new MutationObserver(() => {
+      if (modal.classList.contains("varden-widget-hidden")) {
+        hideBanner()
+      } else {
+        showBanner()
+      }
+    })
+    observer.observe(modal, { attributes: true, attributeFilter: ["class"] })
+  }
+
+  // Modal is already open when this is first called (right after the click)
+  if (!modal.classList.contains("varden-widget-hidden")) {
+    showBanner()
+  }
 }
 
 function VardenBookingTrigger({ url, firstName }: { url: string; firstName: string }) {
