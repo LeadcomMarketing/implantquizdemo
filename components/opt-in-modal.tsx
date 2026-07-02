@@ -371,29 +371,9 @@ export function OptInModal({
 
         {/* Booking step */}
         {step === "booking" && (
-          <div className="p-5 md:p-6">
+          <div className="p-6">
             {clinic.bookingWidgetUrl ? (
-              <>
-                <div className="flex gap-2 items-center bg-coral-soft border border-[#F5D4C4] rounded-[var(--r-sm)] py-2 px-3 mb-3">
-                  <CalendarClock className="w-[16px] h-[16px] text-coral-deep flex-shrink-0" />
-                  <p className="text-[12.5px] text-ink leading-[1.35]">
-                    Inte bokad än <b>– välj en tid nedan för att säkra din plats.</b>
-                  </p>
-                </div>
-                <iframe
-                  src={clinic.bookingWidgetUrl}
-                  title="Boka en tid"
-                  allow="payment *; camera *; microphone *"
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals"
-                  className="w-full h-[72dvh] max-h-[680px] min-h-[420px] rounded-[var(--r-sm)] border border-border"
-                />
-                <div className="mt-3 flex items-center gap-2.5 bg-[#FFF8E6] border border-[#F0D080] rounded-[var(--r-sm)] py-2.5 px-3.5">
-                  <span className="text-[18px] leading-none flex-shrink-0">⚠️</span>
-                  <p className="text-[13px] font-semibold text-[#7A5C00] leading-[1.4]">
-                    OBS: Ignorera priset på 199 kr ovan. Ditt pris är <span className="text-[#2E7D00]">0 kr</span>.
-                  </p>
-                </div>
-              </>
+              <VardenBookingTrigger url={clinic.bookingWidgetUrl} firstName={firstName} />
             ) : (
               <div className="text-center py-3">
                 <h3 className="font-display font-semibold text-[21px]">
@@ -408,6 +388,97 @@ export function OptInModal({
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+// ─── Varden native widget trigger ────────────────────────────────────────────
+// Injects Varden's own script into the top-level page context so BankID works.
+// This replicates exactly what happident.se does — their widgetModalMulti.js
+// creates the modal and iframe itself, so deeplinks and popups are unrestricted.
+
+function VardenBookingTrigger({ url, firstName }: { url: string; firstName: string }) {
+  const [opened, setOpened] = useState(false)
+
+  const openWidget = useCallback(() => {
+    let widgetId = 'w181'
+    try {
+      widgetId = new URL(url).searchParams.get('widgetId') ?? 'w181'
+    } catch {}
+    const dataId = `${widgetId}-`
+
+    // Inject Varden CSS once
+    if (!document.getElementById('widget-modal-style')) {
+      const link = document.createElement('link')
+      link.id = 'widget-modal-style'
+      link.rel = 'stylesheet'
+      link.href = 'https://www.varden.se/booking-widget/widgetModalMulti.css'
+      document.head.appendChild(link)
+    }
+
+    // Inject backdrop + modal divs once
+    if (!document.querySelector(`.vardenWidgetModal[data-widget-id="${dataId}"]`)) {
+      const backdrop = document.createElement('div')
+      backdrop.className = 'vardenWidgetBackdrop varden-widget-hidden'
+      backdrop.setAttribute('data-widget-id', dataId)
+      document.body.appendChild(backdrop)
+
+      const modal = document.createElement('div')
+      modal.className = 'vardenWidgetModal varden-widget-hidden'
+      modal.setAttribute('data-widget-id', dataId)
+
+      const content = document.createElement('div')
+      content.className = 'vardenWidgetModalContent'
+      content.setAttribute('data-widget-id', dataId)
+      content.setAttribute('src', url)
+      modal.appendChild(content)
+      document.body.appendChild(modal)
+    }
+
+    const triggerOpen = () => {
+      const btn = document.createElement('button')
+      btn.setAttribute('data-widget-id', dataId)
+      btn.className = 'openVardenWidgetModalBtn'
+      btn.style.cssText = 'position:fixed;top:-9999px;left:-9999px;'
+      document.body.appendChild(btn)
+      btn.click()
+      setTimeout(() => btn.remove(), 200)
+      setOpened(true)
+    }
+
+    // Inject script (once); auto-trigger after load
+    if (!document.getElementById('widget-modal-script')) {
+      const script = document.createElement('script')
+      script.id = 'widget-modal-script'
+      script.src = 'https://www.varden.se/booking-widget/widgetModalMulti.js'
+      script.onload = triggerOpen
+      document.body.appendChild(script)
+    } else {
+      triggerOpen()
+    }
+  }, [url])
+
+  return (
+    <div className="text-center grid gap-4">
+      <div>
+        <h3 className="font-display font-semibold text-[21px]">
+          Tack{firstName ? `, ${firstName}` : ""}! Ett sista steg.
+        </h3>
+        <p className="text-muted text-[15px] mt-2">
+          Din förfrågan är mottagen. Välj en tid i kalendern för att säkra din plats.
+        </p>
+      </div>
+      <button
+        onClick={openWidget}
+        className="btn-gold w-full py-4 text-[16.5px]"
+      >
+        {opened ? "Kalendern är öppen ↗" : "Välj din tid i kalendern →"}
+      </button>
+      {opened && (
+        <p className="text-[12.5px] text-muted">
+          Bokningskalendern öppnades. Stäng detta fönster om du är klar.
+        </p>
+      )}
     </div>
   )
 }

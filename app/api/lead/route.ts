@@ -9,6 +9,7 @@ interface LeadPayload {
   source: string
   quizAnswers: Record<string, string>
   clinic: string
+  campaign: string
 }
 
 function validateLead(body: unknown): { valid: true; data: LeadPayload } | { valid: false; error: string } {
