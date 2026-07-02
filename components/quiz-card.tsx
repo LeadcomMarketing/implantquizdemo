@@ -47,14 +47,6 @@ export function QuizCard({
     return () => document.removeEventListener("keydown", handleKeyDown)
   }, [handleKeyDown])
 
-  // Focus management - focus first option on question change
-  useEffect(() => {
-    const firstOption = containerRef.current?.querySelector<HTMLButtonElement>(
-      'button[data-option="true"]'
-    )
-    firstOption?.focus()
-  }, [question.id])
-
   return (
     <div
       ref={containerRef}
