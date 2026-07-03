@@ -24,6 +24,12 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
   const campaign = CAMPAIGNS[campaignKey] ?? DEFAULT_CAMPAIGN
   const { hero, questions } = campaign
 
+  // Facebook adset name (passed via Meta's dynamic URL parameter, e.g.
+  // "adset_name={{adset.name}}" in Ads Manager). Falls back to the quiz
+  // variant label for non-Facebook traffic.
+  const adsetName = searchParams.get('adset_name')
+  const campaignLabel = adsetName || (campaignKey === '67' ? 'quiz 67+' : 'quiz general')
+
   const quiz = useQuizState(questions)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalSource, setModalSource] = useState('quiz')
@@ -152,7 +158,7 @@ function QuizPageInner({ clinic }: { clinic: ClinicConfig }) {
         source={modalSource}
         quizAnswers={quiz.answers}
         clinic={clinic}
-        campaign={campaignKey === '67' ? 'quiz 67+' : 'quiz general'}
+        campaign={campaignLabel}
       />
     </div>
   )
