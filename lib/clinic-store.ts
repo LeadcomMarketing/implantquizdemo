@@ -24,10 +24,17 @@ function hasBlob(): boolean {
 
 async function readBlob(): Promise<ClinicConfig[] | null> {
   if (!hasBlob()) return null
-  const result = await get(BLOB_KEY, { access: 'private', useCache: false })
-  if (!result) return null
-  const text = await new Response(result.stream).text()
-  return JSON.parse(text) as ClinicConfig[]
+  try {
+    const result = await get(BLOB_KEY, { access: 'private', useCache: false })
+    if (!result) return null
+    const text = await new Response(result.stream).text()
+    return JSON.parse(text) as ClinicConfig[]
+  } catch (err) {
+    // Never let a Blob outage/misconfiguration take the whole site down —
+    // fall back to SEED_CLINICS (handled by the caller) and log for diagnosis.
+    console.error('[clinic-store] Failed to read clinics from Blob:', err)
+    return null
+  }
 }
 
 async function writeBlob(data: ClinicConfig[]): Promise<void> {
