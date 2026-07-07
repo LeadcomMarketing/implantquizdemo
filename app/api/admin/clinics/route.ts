@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthed } from '@/lib/auth'
-import { getAllClinics, saveClinic, deleteClinic } from '@/lib/clinic-store'
+import { getAllClinicsLive, saveClinic, deleteClinic } from '@/lib/clinic-store'
 import type { ClinicConfig, ClinicReview, ClinicTheme } from '@/lib/types'
 
 async function requireAuth(): Promise<NextResponse | null> {
@@ -100,7 +100,7 @@ function parseClinic(body: unknown): { ok: true; data: ClinicConfig } | { ok: fa
 export async function GET() {
   const unauth = await requireAuth()
   if (unauth) return unauth
-  const clinics = await getAllClinics()
+  const clinics = await getAllClinicsLive()
   return NextResponse.json({ ok: true, clinics })
 }
 
